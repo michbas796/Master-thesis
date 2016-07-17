@@ -13,7 +13,7 @@ public class Population implements Iterable<Individual>{
     public void add(Individual individual) {
         individuals.add(individual);
     }
-    
+        
     public int size() {
         return individuals.size();
     }

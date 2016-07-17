@@ -8,13 +8,13 @@ public class GeneticAlgorithm {
     private Individual bestIndividual;   
     private double meanPopulationFitness;
     private double prevMeanPopulationFitness;
-    private Params params;
+    private GeneticAlgorithmParams params;
     private int generationsWithNoFitnessProgress;
     private CitiesGraph citiesGraph;
 
     public GeneticAlgorithm(CitiesGraph citiesGraph) {
         this.citiesGraph = citiesGraph;
-        params = new Params();
+        params = new GeneticAlgorithmParams();
         population = new Population();        
     }
     
@@ -88,11 +88,11 @@ public class GeneticAlgorithm {
         evaluateMeanFitness();
     }
     
-    public Params getParams() {
+    public GeneticAlgorithmParams getParams() {
         return params;
     }
         
-    public void setParams(Params params) {
+    public void setParams(GeneticAlgorithmParams params) {
         this.params = params;
     }
     
@@ -102,54 +102,5 @@ public class GeneticAlgorithm {
     
     public double getMeanPopulationFitness() {
         return meanPopulationFitness;
-    }
-            
-    
-    public class Params {
-        int maxGenerationsNumber;        
-        int populationSize;               
-        double mutationProbability;        
-        IndividualFactory individualFactory;
-        IndividualSelector selector;
-        PopulationReplacer replacer;
-        StopCondition stopCondition;
-
-        public Params() {
-            maxGenerationsNumber = 10000;
-            populationSize = 10;
-            mutationProbability = 0.1;           
-            individualFactory = new IndividualFactory();
-            selector = new RouletteWheelSelector();
-            replacer = new FullReplacer();
-            stopCondition = StopCondition.GENERATIONS_NUMBER;            
-        }
-                
-        public void setMaxGenerations(int maxGenerationsNumber) {
-            this.maxGenerationsNumber = maxGenerationsNumber;
-        }
-        
-        public void setPopulationSize(int populationSize) {
-            this.populationSize = populationSize;
-        }
-                       
-        public void setSelector(IndividualSelector selector) {
-            this.selector = selector;
-        }
-        
-        public void setReplacer(PopulationReplacer replacer) {
-            this.replacer = replacer;
-        }
-        
-        public void setIndividalFactory(IndividualFactory individualFactory) {
-            this.individualFactory = individualFactory;
-        }
-        
-        public void setStopCondition(StopCondition stopCondition) {
-            this.stopCondition = stopCondition;
-        }
-    }
-    
-    public enum StopCondition {
-        GENERATIONS_NUMBER, MEAN_FITNESS, TIME
-    }
+    }          
 }

@@ -9,6 +9,12 @@ public class ElitaryReplacer implements PopulationReplacer{
     
     @Override
     public void replace(Population currentPopulation, Population newPopulation) {
-        //Arrays.sort(currentPopulation, ()->{currentPopulation[i].getFitness() > currentPopulation[i+1].getFitness()});
+        Population nextPopulation = new Population();
+        currentPopulation.sortByFitness();
+        for (int i = 0; i < eliteSize; i++) {
+            nextPopulation.add(currentPopulation.getIndividual(i));
+        }
+        
+        //TODO
     }
 }
