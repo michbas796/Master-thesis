@@ -23,26 +23,25 @@ public class Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        inputParams = Arrays.copyOfRange(args, 0, args.length - 1);
-        File inputFile;        
+        inputParams = Arrays.copyOfRange(args, 0, args.length - 1);               
         if (args.length == 0) {
             printUsageNotesAndExit();
         } else {
-            inputFile = new File(args[args.length - 1]);
+            File inputFile = new File(args[args.length - 1]);
             if (inputFile.isFile()) {
-                //wczytanie pliku
+                CitiesGraph citiesGraph = new CitiesGraph(inputFile);
                 validateInputParamsAndExitIfInvalid();
                 setAlgorithmParameters();
+                GeneticAlgorithm algorithm = new GeneticAlgorithm(citiesGraph);
+                algorithm.setParams(algParams);
+                //Stopwatch stopwatch = Stopwatch.createStarted();
+                //algorithm.run();
+                //stopwatch.stop();
+                //TODO zapis wyników
             } else {
-                printUsageNotesAndExit();
+                printUsageNotesAndExit();               
             }
-        }         
-//        algorithm.setParams(algParams);
-//        Stopwatch stopwatch = Stopwatch.createStarted();
-//        algorithm.run();
-//        stopwatch.stop();
-//        long algorithmElapsedTime = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-        //TODO zapis wyników
+        }                 
     }
 
     private static void setAlgorithmParameters(){
