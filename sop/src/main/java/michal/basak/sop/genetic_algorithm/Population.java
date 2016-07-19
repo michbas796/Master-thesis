@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Population implements Iterable<Individual>{
-    private ArrayList<Individual> individuals;
+    private final ArrayList<Individual> individuals;
+    
+    public Population() {
+        individuals = new ArrayList<>();
+    }
     
     public Individual getIndividual(int index) {
         return individuals.get(index);

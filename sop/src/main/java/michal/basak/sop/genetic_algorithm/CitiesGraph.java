@@ -4,9 +4,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -26,9 +28,35 @@ public class CitiesGraph {
     }
     
     public int[] getRandomHamiltonianPath(int startNode, int endNode) {
+        //TODO do przemyślenia sposób losowania i sprawdzania poprawności tworzenia ścieżki
         int numberOfNodes = adjacencyMatrix.size();
-        //TODO
-        return new int[10];
+        ArrayList<Integer> nodesList = new ArrayList<>();
+        for (int i = 0; i < numberOfNodes; i++) {
+            if (i == startNode || i == endNode) {
+                continue;
+            }
+            nodesList.add(i);
+        }
+        int[] path = new int[numberOfNodes];
+        path[0] = startNode;
+        int previousNode = startNode;
+        for (int i = 1; i < numberOfNodes - 1; i++) {
+            int randomNode;
+            do {            
+                randomNode = getRandomNode(nodesList);
+            } while (precedenceConstraints.get(previousNode).contains(randomNode));
+            path[i] = randomNode;
+        }
+        path[numberOfNodes-1] = endNode;
+        return path;
+    }
+    
+    public int getRandomNode(List<Integer> nodes) {
+        Random random = new Random();
+        int nodeIndex = random.nextInt(nodes.size());
+        int result = nodes.get(nodeIndex);
+        nodes.remove(nodeIndex);
+        return result;       
     }
     
     public int numberOfCities() {

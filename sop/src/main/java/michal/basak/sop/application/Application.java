@@ -34,9 +34,9 @@ public class Application {
                 setAlgorithmParameters();
                 GeneticAlgorithm algorithm = new GeneticAlgorithm(citiesGraph);
                 algorithm.setParams(algParams);
-                //Stopwatch stopwatch = Stopwatch.createStarted();
-                //algorithm.run();
-                //stopwatch.stop();
+                Stopwatch stopwatch = Stopwatch.createStarted();
+                algorithm.run();
+                stopwatch.stop();
                 //TODO zapis wyników
             } else {
                 printUsageNotesAndExit();               
