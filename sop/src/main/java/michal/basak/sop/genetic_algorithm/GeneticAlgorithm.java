@@ -10,7 +10,7 @@ public class GeneticAlgorithm {
     private double prevMeanPopulationFitness;
     private GeneticAlgorithmParams params;
     private int generationsWithNoFitnessProgress;
-    private CitiesGraph citiesGraph;
+    private final CitiesGraph citiesGraph;
 
     public GeneticAlgorithm(CitiesGraph citiesGraph) {
         this.citiesGraph = citiesGraph;
@@ -41,9 +41,9 @@ public class GeneticAlgorithm {
             case TIME:
                 //TODO
                 return true;
-        }
-        
-        return currentGenerationNumber < params.maxGenerationsNumber; 
+            default:
+                return currentGenerationNumber < params.maxGenerationsNumber;
+        }                
     }
            
     private void prepareFirstPopulation() { 

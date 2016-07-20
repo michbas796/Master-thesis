@@ -1,12 +1,14 @@
 package michal.basak.sop.genetic_algorithm;
 
+import java.util.List;
+
 public class Individual {
     private int fitness;
-    private int[] chromosome;
+    private List<Integer> chromosome;
     public Individual(CitiesGraph citiesGraph) {
-        chromosome = citiesGraph.getRandomHamiltonianPath(0, citiesGraph.numberOfCities() - 1);
+        chromosome = citiesGraph.getRandomHamiltonianPath();
         fitness = 0;
-        for (int i = 0; i < chromosome.length - 1; i++) {
+        for (int i = 0; i < chromosome.size() - 1; i++) {
             fitness += citiesGraph.getEdgeWeight(i, i+1);
         }
     }
@@ -14,7 +16,7 @@ public class Individual {
         return fitness;
     }
     
-    public int[] getChrmosome() {
+    public List<Integer> getChrmosome() {
         return chromosome;
     }
     
