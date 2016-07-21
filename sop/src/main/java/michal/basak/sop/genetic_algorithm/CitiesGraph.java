@@ -13,11 +13,11 @@ import java.util.Scanner;
 public class CitiesGraph {
     public static final int PRECEDENCE_CONSTRAINT = -1;    
     private List<List<Integer>> adjacencyMatrix;
-    private List<List<Integer>> acceptableNextNodes;
+    private List<List<Integer>> precedenceConstraints;
     
     public CitiesGraph(File inputFile) {       
         loadAdjacencyMatrixFromFile(inputFile);
-        assignAcceptableNextNodes();
+        assignPrecedenceConstraints();
     }
     
     public int getEdgeWeight(int startNode, int endNode) {
@@ -57,20 +57,20 @@ public class CitiesGraph {
         }  
     }
       
-    private void assignAcceptableNextNodes() {
-        acceptableNextNodes = new ArrayList<>();
+     private void assignPrecedenceConstraints() {
+        precedenceConstraints = new ArrayList<>();
         for (int rowNum = 0; rowNum < adjacencyMatrix.size(); rowNum++) {
             List<Integer> row = adjacencyMatrix.get(rowNum);
-            List<Integer> currentCityAcceptableFollowers = new ArrayList<>();
+            List<Integer> currentCityPrecedenceConstraints = new ArrayList<>();
             for (int colNum = 0; colNum < adjacencyMatrix.size(); colNum++) {
-                if (row.get(colNum) != PRECEDENCE_CONSTRAINT) {
-                    currentCityAcceptableFollowers.add(colNum);
+                if (row.get(colNum) == PRECEDENCE_CONSTRAINT) {
+                    currentCityPrecedenceConstraints.add(colNum);
                 }
             }
-            acceptableNextNodes.add(currentCityAcceptableFollowers);
+            precedenceConstraints.add(currentCityPrecedenceConstraints);
         }
     }
-    
+      
     private class HamiltonianPath {
         private final List<Integer> path;
         private final int numberOfNodes;
@@ -85,30 +85,49 @@ public class CitiesGraph {
             findFirsAndLastNode();            
         }
         
-        public List<Integer> generate() {
+        public List<Integer> generate() {           
             path.add(startNode);
-            int previousNode = startNode;
-            int addedNodes = 1;
-            while (addedNodes < numberOfNodes - 1) {
-                int randomNode = getRandomNode(acceptableNextNodes.get(previousNode));
-                if (isAcceptable(randomNode)) {
-                    path.add(randomNode);  
-                    addedNodes++;            
+            addRandomNodesToPath();
+            path.add(endNode);
+            repairRandomPath();
+            return path;
+        }
+        
+        private void addRandomNodesToPath() {
+            List<Integer> nodesToAdd = new ArrayList<>();
+            nodesToAdd.addAll(precedenceConstraints.get(endNode));            
+            nodesToAdd.remove((Integer)startNode); //TODO: do przemyślenia
+            while (nodesToAdd.size() > 0) {
+                path.add(takeRandomNodeFrom(nodesToAdd));
+            }
+        }
+        
+        private void repairRandomPath() {
+            for (int currentNodeIndex = path.size() - 2; currentNodeIndex > 0; currentNodeIndex--) {
+                int currentNode = path.get(currentNodeIndex);
+                int predecessorIndex = currentNodeIndex - 1;
+                while (predecessorIndex > 0) {
+                    int predecessor = path.get(predecessorIndex);
+                    if (precedenceConstraints.get(currentNode).contains(predecessor)) {
+                        int tmp = path.set(currentNodeIndex, predecessor);
+                        path.set(predecessorIndex, tmp);
+                        currentNode = predecessor;
+                        continue;
+                    }
+                    predecessorIndex--;
                 }
             }
-            path.add(endNode);
-            return path;
         }
         
         private void findFirsAndLastNode() {
             startNode = NOT_FOUND;
             endNode = NOT_FOUND;        
-            for (int i = 0; i < acceptableNextNodes.size(); i++) {
-                int numberOfNextNodes = acceptableNextNodes.get(i).size();
-                if (numberOfNextNodes == 0) {
-                    endNode = i;               
-                } else if (numberOfNextNodes == numberOfNodes - 1) {
-                    startNode = i;
+            for (int i = 0; i < precedenceConstraints.size(); i++) {
+                int numberOfConstraints = precedenceConstraints.get(i).size();
+                if (numberOfConstraints == 0) {
+                    startNode = i;               
+                } else if (numberOfConstraints == numberOfNodes - 1) {
+                    endNode = i;
                 }
                 if (startNode != NOT_FOUND && endNode != NOT_FOUND) {
                     break;
@@ -116,19 +135,22 @@ public class CitiesGraph {
             }
         }
         
+        /*
         private boolean isAcceptable(int newNode) {
             for (int node : path) {
-                if (!acceptableNextNodes.get(node).contains(newNode)) {
+                if (!acceptableNextNodes.get(node).contains(newNode) || newNode == endNode) {
                     return false;
                 }               
             }
             return true;
         }
+        */
         
-        private int getRandomNode(List<Integer> nodes) {
+        private int takeRandomNodeFrom(List<Integer> nodes) {
             Random random = new Random();
-            int nodeIndex = random.nextInt(nodes.size());
-            int result = nodes.get(nodeIndex);        
+            int nodeIndex = random.nextInt(nodes.size());            
+            int result = nodes.get(nodeIndex); 
+            nodes.remove(nodeIndex);
             return result;       
         }
                 

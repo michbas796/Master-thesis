@@ -8,7 +8,7 @@ public class Individual {
     public Individual(CitiesGraph citiesGraph) {
         chromosome = citiesGraph.getRandomHamiltonianPath();
         fitness = 0;
-        for (int i = 0; i < chromosome.size() - 1; i++) {
+        for (int i = 0; i < chromosome.size() - 2; i++) {
             fitness += citiesGraph.getEdgeWeight(i, i+1);
         }
     }
