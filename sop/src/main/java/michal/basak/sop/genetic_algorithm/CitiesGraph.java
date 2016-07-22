@@ -13,7 +13,8 @@ import java.util.Scanner;
 public class CitiesGraph {
     public static final int PRECEDENCE_CONSTRAINT = -1;    
     private List<List<Integer>> adjacencyMatrix;
-    private List<List<Integer>> precedenceConstraints;
+    private List<List<Integer>> precedenceConstraints; //lista miast których miast będące numerem wiersza nie może
+                                                        //poprzedzać. //TODO: prawdopodobnie przydałaby się lepsza nazwa
     
     public CitiesGraph(File inputFile) {       
         loadAdjacencyMatrixFromFile(inputFile);
@@ -57,7 +58,7 @@ public class CitiesGraph {
         }  
     }
       
-     private void assignPrecedenceConstraints() {
+     private void assignPrecedenceConstraints() {         
         precedenceConstraints = new ArrayList<>();
         for (int rowNum = 0; rowNum < adjacencyMatrix.size(); rowNum++) {
             List<Integer> row = adjacencyMatrix.get(rowNum);
@@ -103,18 +104,18 @@ public class CitiesGraph {
         }
         
         private void repairRandomPath() {
-            for (int currentNodeIndex = path.size() - 2; currentNodeIndex > 0; currentNodeIndex--) {
+            for (int currentNodeIndex = 1; currentNodeIndex < path.size() - 1; currentNodeIndex++) {
                 int currentNode = path.get(currentNodeIndex);
-                int predecessorIndex = currentNodeIndex - 1;
-                while (predecessorIndex > 0) {
-                    int predecessor = path.get(predecessorIndex);
-                    if (precedenceConstraints.get(currentNode).contains(predecessor)) {
-                        int tmp = path.set(currentNodeIndex, predecessor);
-                        path.set(predecessorIndex, tmp);
-                        currentNode = predecessor;
+                int successorIndex = currentNodeIndex + 1;
+                while (successorIndex < path.size()) {
+                    int successor = path.get(successorIndex);
+                    if (precedenceConstraints.get(currentNode).contains(successor)) {
+                        int tmp = path.set(currentNodeIndex, successor);
+                        path.set(successorIndex, tmp);
+                        currentNode = successor;
                         continue;
                     }
-                    predecessorIndex--;
+                    successorIndex++;
                 }
             }
         }
@@ -134,18 +135,7 @@ public class CitiesGraph {
                 }
             }
         }
-        
-        /*
-        private boolean isAcceptable(int newNode) {
-            for (int node : path) {
-                if (!acceptableNextNodes.get(node).contains(newNode) || newNode == endNode) {
-                    return false;
-                }               
-            }
-            return true;
-        }
-        */
-        
+                       
         private int takeRandomNodeFrom(List<Integer> nodes) {
             Random random = new Random();
             int nodeIndex = random.nextInt(nodes.size());            
