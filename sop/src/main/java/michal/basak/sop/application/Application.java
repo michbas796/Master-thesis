@@ -12,9 +12,7 @@ import michal.basak.sop.genetic_algorithm.*;
 
 public class Application {
     
-    private static String[] inputParams; 
-    //CitiesGraph citiesGraph = new CitiesGraph();       
-    //GeneticAlgorithm algorithm = new GeneticAlgorithm(citiesGraph);
+    private static String[] inputParams;     
     private static GeneticAlgorithmParams algParams = new GeneticAlgorithmParams();
     
         

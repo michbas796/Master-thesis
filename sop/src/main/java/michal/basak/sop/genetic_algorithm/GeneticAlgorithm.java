@@ -64,10 +64,7 @@ public class GeneticAlgorithm {
         }
         meanPopulationFitness = individualsFitnessSum / population.size();
     }
-    private void mutate() {
-        //TODO
-    }
-    
+        
     private void selectIndividuals() {
         selectedIndividuals = params.selector.selectIndividuals(population);
     }
@@ -78,6 +75,8 @@ public class GeneticAlgorithm {
             Individual firstParent = selectedIndividuals.getIndividual(i);           
             Individual secondParent = selectedIndividuals.getIndividual(i + 1);
             Individual.Offsprings offsprings = firstParent.crossoverWith(secondParent);
+            offsprings.getFirst().mutate(params.mutationProbability);
+            offsprings.getSecond().mutate(params.mutationProbability);
             offspringsPopulation.add(offsprings.getFirst());
             offspringsPopulation.add(offsprings.getSecond());            
         }

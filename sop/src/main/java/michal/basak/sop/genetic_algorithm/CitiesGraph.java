@@ -13,8 +13,7 @@ import java.util.Scanner;
 public class CitiesGraph {
     public static final int PRECEDENCE_CONSTRAINT = -1;    
     private List<List<Integer>> adjacencyMatrix;
-    private List<List<Integer>> precedenceConstraints; //lista miast których miast będące numerem wiersza nie może
-                                                        //poprzedzać. //TODO: prawdopodobnie przydałaby się lepsza nazwa
+    private List<List<Integer>> precedenceConstraints; 
     
     public CitiesGraph(File inputFile) {       
         loadAdjacencyMatrixFromFile(inputFile);

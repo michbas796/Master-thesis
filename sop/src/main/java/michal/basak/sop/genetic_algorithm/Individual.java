@@ -43,36 +43,29 @@ public class Individual {
         return offsprings;
     }
     
+    public void mutate(double mutationProbability) {
+        //TODO
+    }
+    
     private List<Integer> makeOffspringChromosome(List<Integer> firstParentChromosome, List<Integer> secondParentChromosome) {        
         List<Integer> offspringChromosome = citiesGraph.getEmptyPath();       
         int edgeStart = firstParentChromosome.get(1);
         int edgeEnd = firstParentChromosome.get(2);
-        final int NOT_FOUND = -1;
-        int firstIndex = NOT_FOUND;
-        int secondIndex = NOT_FOUND;
         
-        for (int i = 0; i < secondParentChromosome.size(); i++) {
-            if (secondParentChromosome.get(i) == edgeStart){
-                firstIndex = i;
-            } else if (secondParentChromosome.get(i) == edgeEnd) {
-                secondIndex = i;
-            }
-            if (firstIndex != NOT_FOUND && secondIndex != NOT_FOUND) {
+        int firstParentEdgeElementIndex = 0;              
+        for (int i = secondParentChromosome.size() - 1; i > 0; i--) {
+            int currentElement = secondParentChromosome.get(i);
+            if (currentElement == edgeStart || currentElement == edgeEnd ){
+                firstParentEdgeElementIndex = i;
                 break;
-            }
+            } 
         }
-        
-        if (secondIndex < firstIndex) {
-            int tmp = firstIndex;
-            firstIndex = secondIndex;
-            secondIndex = tmp;
-        }
-        
-        for (int i = 0; i <= secondIndex; i++) {
+                       
+        for (int i = 0; i <= firstParentEdgeElementIndex; i++) {
             offspringChromosome.add(secondParentChromosome.get(i));
         }
         
-        for (int i = secondIndex + 1; i < firstParentChromosome.size(); i++) {
+        for (int i = firstParentEdgeElementIndex + 1; i < firstParentChromosome.size(); i++) {
             int value = firstParentChromosome.get(i);
             if (offspringChromosome.contains(value)) {
                 continue;
@@ -87,8 +80,7 @@ public class Individual {
         Individual firstOffspring;
         Individual secondOffspring;
         
-        private Offsprings() {
-            
+        private Offsprings() {            
         }
                            
         public Individual getFirst() {
