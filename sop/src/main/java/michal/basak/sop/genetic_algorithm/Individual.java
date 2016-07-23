@@ -22,7 +22,9 @@ public class Individual {
     private void evaluateFitness() {
         fitness = 0;
         for (int i = 0; i < chromosome.size() - 2; i++) {
-            fitness += citiesGraph.getEdgeWeight(i, i+1);
+            int edgeStart = chromosome.get(i);
+            int edgeEnd = chromosome.get(i+1);
+            fitness += citiesGraph.getEdgeWeight(edgeStart, edgeEnd);
         }
     }
     
@@ -43,8 +45,10 @@ public class Individual {
         return offsprings;
     }
     
-    public void mutate(double mutationProbability) {
-        //TODO
+    public void mutate(double mutationProbability) {        
+        if (Math.random() < mutationProbability) {
+            //TODO mutacja
+        }
     }
     
     private List<Integer> makeOffspringChromosome(List<Integer> firstParentChromosome, List<Integer> secondParentChromosome) {        
