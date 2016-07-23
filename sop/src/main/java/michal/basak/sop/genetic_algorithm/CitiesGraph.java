@@ -26,10 +26,13 @@ public class CitiesGraph {
     }
     
     public List<Integer> getRandomHamiltonianPath() {        
-        HamiltonianPath path = new HamiltonianPath();        
-        return path.generate();
+        return new HamiltonianPath().generate();
     }
     
+    public List<Integer> getEmptyPath() {
+        return new HamiltonianPath().emptyPath();
+    }
+        
     public int numberOfCities() {
         return adjacencyMatrix.size();
     }
@@ -82,15 +85,20 @@ public class CitiesGraph {
         
         public HamiltonianPath() {
             path = new LinkedList<>();
-            numberOfNodes = adjacencyMatrix.size();
-            findFirsAndLastNode();            
+            numberOfNodes = adjacencyMatrix.size();                        
         }
         
-        public List<Integer> generate() {           
+        public List<Integer> generate() { 
+            findFirstAndLastNode();
             path.add(startNode);
             addRandomNodesToPath();
             path.add(endNode);
             repairRandomPath();
+            return path;
+        }
+        
+        public List<Integer> emptyPath() {
+            path.clear();
             return path;
         }
         
@@ -120,7 +128,7 @@ public class CitiesGraph {
             }
         }
         
-        private void findFirsAndLastNode() {
+        private void findFirstAndLastNode() {
             startNode = NOT_FOUND;
             endNode = NOT_FOUND;        
             for (int i = 0; i < precedenceConstraints.size(); i++) {

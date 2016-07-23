@@ -4,7 +4,7 @@ public class GeneticAlgorithm {
     private int currentGenerationNumber;
     private Population population;
     private Population selectedIndividuals;
-    private Population offsprings;
+    private Population offspringsPopulation;
     private Individual bestIndividual;   
     private double meanPopulationFitness;
     private double prevMeanPopulationFitness;
@@ -71,20 +71,21 @@ public class GeneticAlgorithm {
     private void selectIndividuals() {
         selectedIndividuals = params.selector.selectIndividuals(population);
     }
-    
-    private void crossover(Individual firstParent, Individual secondParent) {
-        //TODO
-    }
-    
+           
     private void createOffspringsPopulation() {
+        offspringsPopulation = new Population();        
         for (int i = 0; i < selectedIndividuals.size(); i += 2) {
-            crossover(selectedIndividuals.getIndividual(i), selectedIndividuals.getIndividual(i));
+            Individual firstParent = selectedIndividuals.getIndividual(i);           
+            Individual secondParent = selectedIndividuals.getIndividual(i + 1);
+            Individual.Offsprings offsprings = firstParent.crossoverWith(secondParent);
+            offspringsPopulation.add(offsprings.getFirst());
+            offspringsPopulation.add(offsprings.getSecond());            
         }
     }
     
     private void replacePopulation() {
         currentGenerationNumber++;
-        params.replacer.replace(population, offsprings);
+        params.replacer.replace(population, offspringsPopulation);
         evaluateMeanFitness();
     }
     
