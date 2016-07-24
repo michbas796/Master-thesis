@@ -71,7 +71,7 @@ public class GeneticAlgorithm {
            
     private void createOffspringsPopulation() {
         offspringsPopulation = new Population();        
-        for (int i = 0; i < selectedIndividuals.size(); i += 2) {
+        for (int i = 0; i < selectedIndividuals.size() - 1; i += 2) {
             Individual firstParent = selectedIndividuals.getIndividual(i);           
             Individual secondParent = selectedIndividuals.getIndividual(i + 1);
             Individual.Offsprings offsprings = firstParent.crossoverWith(secondParent);

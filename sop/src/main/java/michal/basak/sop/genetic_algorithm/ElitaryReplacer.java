@@ -10,7 +10,7 @@ public class ElitaryReplacer implements PopulationReplacer{
     @Override
     public void replace(Population currentPopulation, Population newPopulation) {
         Population nextPopulation = new Population();
-        currentPopulation.sortByFitness();
+        currentPopulation.sortFromBestToWorst();
         for (int i = 0; i < eliteSize; i++) {
             nextPopulation.add(currentPopulation.getIndividual(i));
         }

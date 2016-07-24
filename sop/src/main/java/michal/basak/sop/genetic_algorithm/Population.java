@@ -27,8 +27,12 @@ public class Population implements Iterable<Individual>{
         return individuals.iterator();
     }
     
-    public void sortByFitness() {
+    public void sortFromBestToWorst() {
         individuals.sort((Individual i1, Individual i2) -> i1.getFitness() - i2.getFitness());
+    }
+    
+    public void sortFromWorstToBest() {
+        individuals.sort((Individual i1, Individual i2) -> i2.getFitness() - i1.getFitness());
     }
                  
 }
