@@ -2,7 +2,6 @@ package michal.basak.sop.genetic_algorithm;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class RouletteWheelSelector implements IndividualSelector {
     

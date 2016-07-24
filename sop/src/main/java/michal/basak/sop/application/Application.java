@@ -35,6 +35,8 @@ public class Application {
                 algorithm.run();
                 stopwatch.stop();
                 //TODO zapis wyników
+                //tymczasowo:
+                System.out.println(algorithm.getBestIndividual().getFitness());
             } else {
                 printUsageNotesAndExit();               
             }
