@@ -19,11 +19,19 @@ public class GeneticAlgorithm {
     }
     
     public void run() {
-        prepareFirstPopulation();       
+        prepareFirstPopulation();
+        
         while (isNextGeneration()) {
             selectIndividuals();
             createOffspringsPopulation();
             replacePopulation();            
+        }
+    }
+
+    private void findNewBestIndividual() {
+        Individual currentBest = currentPopulationBestIndividual();
+        if (currentBest.getFitness() < bestIndividual.getFitness()) {
+            bestIndividual = currentBest;
         }
     }
     
@@ -55,6 +63,7 @@ public class GeneticAlgorithm {
             population.add(newIndividual);            
         }
         evaluateMeanFitness();
+        bestIndividual = currentPopulationBestIndividual();
     }
     
     private void evaluateMeanFitness() {
@@ -86,6 +95,7 @@ public class GeneticAlgorithm {
         currentGenerationNumber++;
         params.replacer.replace(population, offspringsPopulation);
         evaluateMeanFitness();
+        findNewBestIndividual();
     }
     
     public GeneticAlgorithmParams getParams() {
@@ -102,5 +112,10 @@ public class GeneticAlgorithm {
     
     public double getMeanPopulationFitness() {
         return meanPopulationFitness;
-    }          
+    }
+    
+    public Individual currentPopulationBestIndividual() {
+        population.sortFromBestToWorst();
+        return population.getIndividual(0);
+    }
 }
