@@ -132,7 +132,7 @@ public class Application {
             } else if(inputParams[i].matches("-fr|er")) {
                 populationReplaceParamsList.add(inputParams[i]);
             }
-            if (inputParams[i].matches("-g|-t|-mf|-ts|-er|p")) {
+            if (inputParams[i].matches("-g|-t|-mf|-ts|-er|-p")) {
                 if (i+1 >= inputParams.length || !inputParams[i+1].matches("\\d+")) {
                     printUsageNotesAndExit();
                 }

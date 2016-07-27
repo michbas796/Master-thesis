@@ -13,7 +13,7 @@ public class StochasticUniversalSamplingSelector implements IndividualSelector {
         Population selectedIndividuals = new Population();
         populationSize = population.size();
         evaluateSelectionProbabilities(population);
-        int pointer = new Random().nextInt();
+        int pointer = new Random().nextInt(populationSize);
         int sum = 0;        
         for (int i = 0; i < population.size(); i++) {
             sum += expectedCopiesNumberOfIndividual(i);
