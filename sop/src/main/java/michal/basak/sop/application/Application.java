@@ -75,7 +75,7 @@ public class Application {
                         algParams.setSelector(new RankSelector());
                         break;
                     case "-s":
-                        algParams.setSelector(new StochasticSelector());
+                        algParams.setSelector(new StochasticUniversalSamplingSelector());
                         break;
                     case "-fr":
                         algParams.setReplacer(new FullReplacer());
