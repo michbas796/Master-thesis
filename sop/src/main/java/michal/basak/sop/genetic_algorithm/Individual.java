@@ -24,7 +24,7 @@ public class Individual {
         for (int i = 0; i < chromosome.size() - 2; i++) {
             int edgeStart = chromosome.get(i);
             int edgeEnd = chromosome.get(i+1);
-            fitness += citiesGraph.getEdgeWeight(edgeStart, edgeEnd);
+            fitness += citiesGraph.weightOfEdge(edgeStart, edgeEnd);
         }
     }
     

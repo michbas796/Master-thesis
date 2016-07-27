@@ -16,7 +16,7 @@ public class StochasticUniversalSamplingSelector implements IndividualSelector {
         int pointer = new Random().nextInt();
         int sum = 0;        
         for (int i = 0; i < population.size(); i++) {
-            sum += expectedCopiesNumberOf(i);
+            sum += expectedCopiesNumberOfIndividual(i);
             while (sum > pointer) {                
                 selectedIndividuals.add(population.getIndividual(i));
                 pointer++;
@@ -25,7 +25,7 @@ public class StochasticUniversalSamplingSelector implements IndividualSelector {
         return selectedIndividuals;
     }
     
-    private double expectedCopiesNumberOf(int individual) {
+    private double expectedCopiesNumberOfIndividual(int individual) {
         return populationSize * selectionProbability[individual];
     }
     

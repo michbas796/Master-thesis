@@ -20,7 +20,7 @@ public class CitiesGraph {
         assignPrecedenceConstraints();
     }
     
-    public int getEdgeWeight(int startNode, int endNode) {
+    public int weightOfEdge(int startNode, int endNode) {
         return adjacencyMatrix.get(startNode).get(endNode);
     }
     

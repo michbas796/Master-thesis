@@ -48,7 +48,7 @@ public class Application {
             try {
                 switch (inputParams[i]) {
                     case "-g":
-                        algParams.setMaxGenerations(Integer.parseInt(inputParams[i+1]));
+                        algParams.setMaxNumberOfGenerations(Integer.parseInt(inputParams[i+1]));
                         algParams.setStopCondition(GeneticAlgorithmParams.StopCondition.GENERATIONS_NUMBER);
                         i++;
                         break;
@@ -58,7 +58,7 @@ public class Application {
                         break;
                     case "-mf":
                         algParams.setStopCondition(GeneticAlgorithmParams.StopCondition.MEAN_FITNESS);
-                        algParams.setMaxGenerations(Integer.parseInt(inputParams[i+1]));
+                        algParams.setMaxNumberOfGenerations(Integer.parseInt(inputParams[i+1]));
                         i++;
                         break;
                     case "-p":

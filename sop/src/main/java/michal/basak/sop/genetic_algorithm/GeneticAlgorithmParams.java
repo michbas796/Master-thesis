@@ -19,7 +19,7 @@ public class GeneticAlgorithmParams {
             stopCondition = StopCondition.GENERATIONS_NUMBER;            
         }
                                
-        public void setMaxGenerations(int maxGenerationsNumber) {
+        public void setMaxNumberOfGenerations(int maxGenerationsNumber) {
             this.maxGenerationsNumber = maxGenerationsNumber;
         }
         
