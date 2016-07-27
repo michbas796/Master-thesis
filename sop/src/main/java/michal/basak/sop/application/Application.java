@@ -69,7 +69,7 @@ public class Application {
                         algParams.setSelector(new RouletteWheelSelector());
                         break;
                     case "-ts":
-                        algParams.setSelector(new TournamentSelector());
+                        algParams.setSelector(new TournamentSelector(Integer.parseInt(inputParams[i+1])));
                         break;
                     case "-rs":
                         algParams.setSelector(new RankSelector());
