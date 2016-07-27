@@ -75,7 +75,7 @@ public class GeneticAlgorithm {
     }
         
     private void selectIndividuals() {
-        selectedIndividuals = params.selector.selectIndividuals(population);
+        selectedIndividuals = params.selector.selectIndividualsFrom(population);
     }
            
     private void createOffspringsPopulation() {

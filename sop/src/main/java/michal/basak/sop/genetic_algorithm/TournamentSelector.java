@@ -11,7 +11,7 @@ public class TournamentSelector implements IndividualSelector {
     }
            
     @Override
-    public Population selectIndividuals(Population population) {
+    public Population selectIndividualsFrom(Population population) {
         Population selectedIndividuals = new Population();
         for (int i = 0; i < population.size(); i++) {
             selectedIndividuals.add(bestIndividualFromTournament(population));

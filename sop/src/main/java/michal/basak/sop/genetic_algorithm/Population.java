@@ -34,5 +34,13 @@ public class Population implements Iterable<Individual>{
     public void sortFromWorstToBest() {
         individuals.sort((Individual i1, Individual i2) -> i2.getFitness() - i1.getFitness());
     }
+    
+    public static int totalFitnessOf(Population population) {
+        int fitnessSum = 0;
+        for (Individual i : population) {
+            fitnessSum += i.getFitness();
+        }
+        return fitnessSum;
+    }
                  
 }

@@ -8,7 +8,7 @@ public class RankSelector implements IndividualSelector {
     private double[] distributionFunction;
     
     @Override
-    public Population selectIndividuals(Population population) {
+    public Population selectIndividualsFrom(Population population) {
         
         Population selectedIndividuals = new Population();
         population.sortFromWorstToBest();        
