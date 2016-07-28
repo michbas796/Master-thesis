@@ -1,6 +1,7 @@
 package michal.basak.sop.genetic_algorithm;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 
 public class Population implements Iterable<Individual>{
@@ -33,6 +34,10 @@ public class Population implements Iterable<Individual>{
     
     public void sortFromWorstToBest() {
         individuals.sort((Individual i1, Individual i2) -> i2.getFitness() - i1.getFitness());
+    }
+    
+    public void shuffle() {
+        Collections.shuffle(individuals);
     }
     
     public static int totalFitnessOf(Population population) {

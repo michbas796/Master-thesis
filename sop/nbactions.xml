@@ -10,7 +10,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath michal.basak.sop.application.Application -rw -g 20 br17.10.sop</exec.args>
+                <exec.args>-classpath %classpath michal.basak.sop.application.Application -p 10 -g 2000 -s br17.10.sop</exec.args>
                 <exec.executable>java</exec.executable>
                 <exec.workingdir>C:\masterthesis\sop\target</exec.workingdir>
             </properties>
@@ -25,7 +25,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
             </goals>
             <properties>
-                <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath michal.basak.sop.application.Application -rw -g 20 br17.10.sop</exec.args>
+                <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath michal.basak.sop.application.Application -p 10 -g 2000 -s br17.10.sop</exec.args>
                 <exec.executable>java</exec.executable>
                 <jpda.listen>true</jpda.listen>
                 <exec.workingdir>C:\masterthesis\sop\target</exec.workingdir>
@@ -41,7 +41,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath michal.basak.sop.application.Application -rw -g 20 br17.10.sop</exec.args>
+                <exec.args>-classpath %classpath michal.basak.sop.application.Application -p 10 -g 2000 -s br17.10.sop</exec.args>
                 <exec.executable>java</exec.executable>
                 <exec.workingdir>C:\masterthesis\sop\target</exec.workingdir>
             </properties>

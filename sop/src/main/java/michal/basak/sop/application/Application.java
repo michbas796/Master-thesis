@@ -1,5 +1,9 @@
 package michal.basak.sop.application;
 
+import michal.basak.sop.genetic_algorithm.selection.RankSelector;
+import michal.basak.sop.genetic_algorithm.selection.RouletteWheelSelector;
+import michal.basak.sop.genetic_algorithm.selection.TournamentSelector;
+import michal.basak.sop.genetic_algorithm.selection.StochasticUniversalSamplingSelector;
 import com.google.common.base.Stopwatch;
 import java.io.File;
 import java.util.ArrayList;
@@ -127,7 +131,7 @@ public class Application {
             }
             if (inputParams[i].matches("-g|-t|-mf")) {
                 stopConditionParamsList.add(inputParams[i]);
-            } else if (inputParams[i].matches("-rw|-rs|-s")) {
+            } else if (inputParams[i].matches("-rw|-rs|-ts|-s")) {
                 selectionMethodParamsList.add(inputParams[i]);
             } else if(inputParams[i].matches("-fr|er")) {
                 populationReplaceParamsList.add(inputParams[i]);

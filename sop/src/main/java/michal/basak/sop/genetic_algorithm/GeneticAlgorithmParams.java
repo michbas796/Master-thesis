@@ -1,5 +1,7 @@
 package michal.basak.sop.genetic_algorithm;
 
+import michal.basak.sop.genetic_algorithm.selection.*;
+
 public class GeneticAlgorithmParams {
         int maxGenerationsNumber;        
         int populationSize;               
