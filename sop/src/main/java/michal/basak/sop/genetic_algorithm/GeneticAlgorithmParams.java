@@ -48,6 +48,10 @@ public class GeneticAlgorithmParams {
             this.stopCondition = stopCondition;
         }
         
+        public void setMutationProbability(double mutationProbability) {
+            this.mutationProbability = mutationProbability;
+        }
+        
         public enum StopCondition {
             GENERATIONS_NUMBER, MEAN_FITNESS, TIME
         }

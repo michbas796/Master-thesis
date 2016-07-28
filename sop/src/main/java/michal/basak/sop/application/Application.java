@@ -93,6 +93,9 @@ public class Application {
                     case "-er":                       
                         algParams.setReplacer(new ElitaryReplacer(Integer.parseInt(inputParams[i+1])));
                         break;
+                    case "-mp":                        
+                        algParams.setMutationProbability(Double.parseDouble(inputParams[i+1]));
+                        break;
             }
             } catch (NumberFormatException e) {
                 //TODO
@@ -118,6 +121,8 @@ public class Application {
         System.out.println("-bt binarna selekcja turniejowa");
         System.out.println("-ts selekcja turniejowa");
         System.out.println("-s selekcja stochastyczna");
+        System.out.println("Prawdopodobieństwo mutacji:");
+        System.out.println("-mp <liczba z przedziału (0,1)>");
         System.out.println("Zastępowanie populacji:");
         System.out.println("-fr | -er <rozmiar elity>");
         System.out.println("-fr zastępuje całą populację populacją potomną");
@@ -145,6 +150,11 @@ public class Application {
             }
             if (inputParams[i].matches("-g|-t|-mf|-ts|-er|-p")) {
                 if (i+1 >= inputParams.length || !inputParams[i+1].matches("\\d+")) {
+                    printUsageNotesAndExit();
+                }
+                i++;
+            } else if (inputParams[i].matches("-mp")) {
+                if (i+1 >= inputParams.length || !inputParams[i+1].matches("0.\\d+")) {
                     printUsageNotesAndExit();
                 }
                 i++;
