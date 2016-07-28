@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import michal.basak.sop.genetic_algorithm.*;
+import michal.basak.sop.genetic_algorithm.selection.BinaryTournamentSelector;
 
 
 public class Application {
@@ -83,6 +84,9 @@ public class Application {
                     case "-s":
                         algParams.setSelector(new StochasticUniversalSamplingSelector());
                         break;
+                    case "-bt":
+                        algParams.setSelector(new BinaryTournamentSelector());
+                        break;
                     case "-fr":
                         algParams.setReplacer(new FullReplacer());
                         break;
@@ -109,8 +113,9 @@ public class Application {
         System.out.println("Liczba osobników w populacji:");
         System.out.println("-p <liczebność populacji>");
         System.out.println("Metoda selekcji:");
-        System.out.println("-rw | -ts <rozmiar turnieju> | -rs | -s ");
+        System.out.println("-rw | -ts <rozmiar turnieju> |-bt | -rs | -s ");
         System.out.println("-rw selekcja proporcjonalna (koło ruletki)");
+        System.out.println("-bt binarna selekcja turniejowa");
         System.out.println("-ts selekcja turniejowa");
         System.out.println("-s selekcja stochastyczna");
         System.out.println("Zastępowanie populacji:");
@@ -133,7 +138,7 @@ public class Application {
             }
             if (inputParams[i].matches("-g|-t|-mf")) {
                 stopConditionParamsList.add(inputParams[i]);
-            } else if (inputParams[i].matches("-rw|-rs|-ts|-s")) {
+            } else if (inputParams[i].matches("-rw|-rs|-ts|-s|-bt")) {
                 selectionMethodParamsList.add(inputParams[i]);
             } else if(inputParams[i].matches("-fr|er")) {
                 populationReplaceParamsList.add(inputParams[i]);
@@ -144,7 +149,7 @@ public class Application {
                 }
                 i++;
             } else {
-                if (!inputParams[i].matches("-rw|-rs|-s|-fr")) {
+                if (!inputParams[i].matches("-rw|-rs|-s|-fr|-bt")) {
                     printUsageNotesAndExit();
                 }
             }
