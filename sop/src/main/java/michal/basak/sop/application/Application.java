@@ -1,5 +1,7 @@
 package michal.basak.sop.application;
 
+import michal.basak.sop.genetic_algorithm.population_replacing.FullReplacer;
+import michal.basak.sop.genetic_algorithm.population_replacing.ElitaryReplacer;
 import michal.basak.sop.genetic_algorithm.selection.RankSelector;
 import michal.basak.sop.genetic_algorithm.selection.RouletteWheelSelector;
 import michal.basak.sop.genetic_algorithm.selection.TournamentSelector;

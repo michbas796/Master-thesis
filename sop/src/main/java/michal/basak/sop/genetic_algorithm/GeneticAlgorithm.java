@@ -1,5 +1,7 @@
 package michal.basak.sop.genetic_algorithm;
 
+import michal.basak.sop.genetic_algorithm.individuals.Individual;
+
 public class GeneticAlgorithm {
     private int currentGenerationNumber;
     private Population population;
@@ -93,7 +95,7 @@ public class GeneticAlgorithm {
     
     private void replacePopulation() {
         currentGenerationNumber++;
-        params.replacer.replace(population, offspringsPopulation);
+        population = params.replacer.replace(population, offspringsPopulation);
         evaluateMeanFitness();
         findNewBestIndividual();
     }

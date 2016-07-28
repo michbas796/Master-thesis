@@ -1,6 +1,6 @@
 package michal.basak.sop.genetic_algorithm.selection;
 
-import michal.basak.sop.genetic_algorithm.Individual;
+import michal.basak.sop.genetic_algorithm.individuals.Individual;
 import michal.basak.sop.genetic_algorithm.Population;
 import static michal.basak.sop.genetic_algorithm.Population.totalFitnessOf;
 

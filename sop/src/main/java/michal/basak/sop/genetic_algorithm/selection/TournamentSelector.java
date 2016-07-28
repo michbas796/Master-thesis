@@ -1,7 +1,7 @@
 package michal.basak.sop.genetic_algorithm.selection;
 
 import java.util.Random;
-import michal.basak.sop.genetic_algorithm.Individual;
+import michal.basak.sop.genetic_algorithm.individuals.Individual;
 import michal.basak.sop.genetic_algorithm.Population;
 
 public class TournamentSelector extends IndividualSelector {

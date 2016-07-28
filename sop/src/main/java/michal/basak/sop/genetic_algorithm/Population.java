@@ -1,5 +1,6 @@
 package michal.basak.sop.genetic_algorithm;
 
+import michal.basak.sop.genetic_algorithm.individuals.Individual;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
