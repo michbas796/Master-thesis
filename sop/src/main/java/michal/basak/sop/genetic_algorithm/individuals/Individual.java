@@ -70,7 +70,7 @@ public class Individual {
             offspringChromosome.add(secondParentChromosome.get(i));
         }
         
-        for (int i = firstParentEdgeElementIndex + 1; i < firstParentChromosome.size(); i++) {
+        for (int i = 3; i < firstParentChromosome.size(); i++) {
             int value = firstParentChromosome.get(i);
             if (offspringChromosome.contains(value)) {
                 continue;
