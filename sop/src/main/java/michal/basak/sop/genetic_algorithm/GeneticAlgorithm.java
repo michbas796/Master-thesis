@@ -1,8 +1,6 @@
 package michal.basak.sop.genetic_algorithm;
 
 import com.google.common.base.Stopwatch;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 import michal.basak.sop.genetic_algorithm.individuals.Individual;
@@ -41,7 +39,7 @@ public class GeneticAlgorithm implements Callable<GeneticAlgorithm.Results> {
     }
             
     private void findNewBestIndividual() {
-        Individual currentBest = currentPopulationBestIndividual();
+        Individual currentBest = population.getBestIndividual();
         if (currentBest.getFitness() < results.bestIndividual.getFitness()) {
             results.bestIndividual = currentBest;
         }
@@ -73,8 +71,8 @@ public class GeneticAlgorithm implements Callable<GeneticAlgorithm.Results> {
             newIndividual = params.individualFactory.createIndividual(citiesGraph);
             population.add(newIndividual);            
         }
-        evaluateMeanFitness();
-        results.bestIndividual = currentPopulationBestIndividual();
+        evaluateMeanFitness(); 
+        results.bestIndividual = population.getBestIndividual();
     }
     
     private void evaluateMeanFitness() {
@@ -116,12 +114,7 @@ public class GeneticAlgorithm implements Callable<GeneticAlgorithm.Results> {
     public void setParams(GeneticAlgorithmParams params) {
         this.params = params;
     }
-       
-    public Individual currentPopulationBestIndividual() {
-        population.sortFromBestToWorst();
-        return population.getIndividual(0);
-    }
-    
+               
     public class Results {
         Individual bestIndividual;
         double meanPopulationFitness;

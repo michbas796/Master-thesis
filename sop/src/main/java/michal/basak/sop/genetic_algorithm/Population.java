@@ -41,6 +41,10 @@ public class Population implements Iterable<Individual>{
         Collections.shuffle(individuals);
     }
     
+    public Individual getBestIndividual() {
+        return Collections.min(individuals, (Individual i1, Individual i2) -> i1.getFitness() - i2.getFitness());
+    }
+    
     public static int totalFitnessOf(Population population) {
         int fitnessSum = 0;
         for (Individual i : population) {
