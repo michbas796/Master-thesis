@@ -1,28 +1,22 @@
 package michal.basak.sop.application;
 
-import michal.basak.sop.genetic_algorithm.population_replacing.FullReplacer;
-import michal.basak.sop.genetic_algorithm.population_replacing.ElitaryReplacer;
-import michal.basak.sop.genetic_algorithm.selection.RankSelector;
-import michal.basak.sop.genetic_algorithm.selection.RouletteWheelSelector;
-import michal.basak.sop.genetic_algorithm.selection.TournamentSelector;
-import michal.basak.sop.genetic_algorithm.selection.StochasticUniversalSamplingSelector;
-import com.google.common.base.Stopwatch;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import michal.basak.sop.genetic_algorithm.*;
-import michal.basak.sop.genetic_algorithm.selection.BinaryTournamentSelector;
-
+import michal.basak.sop.genetic_algorithm.population_replacing.*;
+import michal.basak.sop.genetic_algorithm.selection.*;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
+import java.io.File;
+import java.util.*;
+import java.util.concurrent.Executors;
 
 public class Application {
     
     private static String[] inputParams;     
     private static GeneticAlgorithmParams algParams = new GeneticAlgorithmParams();
-    
-        
+           
     /**
      * @param args the command line arguments
      */
@@ -38,18 +32,29 @@ public class Application {
                 setAlgorithmParameters();
                 GeneticAlgorithm algorithm = new GeneticAlgorithm(citiesGraph);
                 algorithm.setParams(algParams);
-                Stopwatch stopwatch = Stopwatch.createStarted();
-                algorithm.run();
-                stopwatch.stop();
-                //TODO zapis wyników
-                //tymczasowo:
-                System.out.println(algorithm.getBestIndividual().getFitness());
+                                
+                ListeningExecutorService executorService = MoreExecutors.listeningDecorator(Executors.newSingleThreadExecutor());
+                ListenableFuture<GeneticAlgorithm.Results> futureResults = executorService.submit(algorithm);
+                Futures.addCallback(futureResults, new FutureCallback<GeneticAlgorithm.Results>() {
+                    @Override
+                    public void onSuccess(GeneticAlgorithm.Results results) {                                                                     
+                        System.out.println(results.getBestIndividual().getFitness());
+                        System.out.println(results.getBestIndividual().getChrmosome());
+                        System.out.println(results.getMeanPopulationFitness());
+                        System.out.println("Czas wykonania: " + results.getExecutionTimeInMilliseconds() + "ms");
+                        executorService.shutdown();
+                    }
+                    @Override
+                    public void onFailure(Throwable thrown) {
+                      //TODO
+                    }
+                });                                
             } else {
                 printUsageNotesAndExit();               
             }
         }                 
     }
-
+    
     private static void setAlgorithmParameters(){
         for (int i = 0; i < inputParams.length; i++) {
             try {
@@ -61,7 +66,7 @@ public class Application {
                         break;
                     case "-t":
                         algParams.setStopCondition(GeneticAlgorithmParams.StopCondition.TIME);
-                        //TODO
+                        algParams.setMaxExecutionTimeInMilliseconds(Long.parseLong(inputParams[i+1]));
                         break;
                     case "-mf":
                         algParams.setStopCondition(GeneticAlgorithmParams.StopCondition.MEAN_FITNESS);

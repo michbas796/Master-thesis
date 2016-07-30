@@ -1,39 +1,49 @@
 package michal.basak.sop.genetic_algorithm;
 
+import com.google.common.base.Stopwatch;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 import michal.basak.sop.genetic_algorithm.individuals.Individual;
 
-public class GeneticAlgorithm {
+public class GeneticAlgorithm implements Callable<GeneticAlgorithm.Results> {
     private int currentGenerationNumber;
     private Population population;
     private Population selectedIndividuals;
-    private Population offspringsPopulation;
-    private Individual bestIndividual;   
-    private double meanPopulationFitness;
+    private Population offspringsPopulation;           
     private double prevMeanPopulationFitness;
     private GeneticAlgorithmParams params;
     private int generationsWithNoFitnessProgress;
     private final CitiesGraph citiesGraph;
+    private final Results results;
+    private Stopwatch stopwatch;
 
     public GeneticAlgorithm(CitiesGraph citiesGraph) {
         this.citiesGraph = citiesGraph;
         params = new GeneticAlgorithmParams();
-        population = new Population();        
+        population = new Population();
+        results = new Results();
     }
     
-    public void run() {
-        prepareFirstPopulation();
-        
+    @Override
+    public Results call() {
+        stopwatch = Stopwatch.createStarted();
+        prepareFirstPopulation();        
         while (isNextGeneration()) {
             selectIndividuals();
             createOffspringsPopulation();
             replacePopulation();            
         }
+        stopwatch.stop();
+        results.executionTime = stopwatch.elapsed(TimeUnit.MILLISECONDS);
+        return results;
     }
-
+            
     private void findNewBestIndividual() {
         Individual currentBest = currentPopulationBestIndividual();
-        if (currentBest.getFitness() < bestIndividual.getFitness()) {
-            bestIndividual = currentBest;
+        if (currentBest.getFitness() < results.bestIndividual.getFitness()) {
+            results.bestIndividual = currentBest;
         }
     }
     
@@ -42,15 +52,14 @@ public class GeneticAlgorithm {
             case GENERATIONS_NUMBER:
                 return currentGenerationNumber < params.maxGenerationsNumber;
             case MEAN_FITNESS:
-                if (meanPopulationFitness <= prevMeanPopulationFitness) {
+                if (results.meanPopulationFitness <= prevMeanPopulationFitness) {
                     generationsWithNoFitnessProgress++;
                 } else {
                     generationsWithNoFitnessProgress = 0;
                 }
                 return generationsWithNoFitnessProgress < params.maxGenerationsNumber;
             case TIME:
-                //TODO
-                return true;
+                return stopwatch.elapsed(TimeUnit.MILLISECONDS) < params.maxExecutionTimeInMilliseconds;                
             default:
                 return currentGenerationNumber < params.maxGenerationsNumber;
         }                
@@ -65,7 +74,7 @@ public class GeneticAlgorithm {
             population.add(newIndividual);            
         }
         evaluateMeanFitness();
-        bestIndividual = currentPopulationBestIndividual();
+        results.bestIndividual = currentPopulationBestIndividual();
     }
     
     private void evaluateMeanFitness() {
@@ -73,7 +82,7 @@ public class GeneticAlgorithm {
         for (Individual i : population) {
             individualsFitnessSum += i.getFitness();
         }
-        meanPopulationFitness = individualsFitnessSum / population.size();
+        results.meanPopulationFitness = individualsFitnessSum / population.size();
     }
         
     private void selectIndividuals() {
@@ -107,17 +116,28 @@ public class GeneticAlgorithm {
     public void setParams(GeneticAlgorithmParams params) {
         this.params = params;
     }
-    
-    public Individual getBestIndividual() {
-        return bestIndividual;
-    }
-    
-    public double getMeanPopulationFitness() {
-        return meanPopulationFitness;
-    }
-    
+       
     public Individual currentPopulationBestIndividual() {
         population.sortFromBestToWorst();
         return population.getIndividual(0);
     }
+    
+    public class Results {
+        Individual bestIndividual;
+        double meanPopulationFitness;
+        long executionTime;
+        
+        public Individual getBestIndividual() {
+            return bestIndividual;
+        }
+        
+        public double getMeanPopulationFitness() {
+            return meanPopulationFitness;
+        }
+        
+        public long getExecutionTimeInMilliseconds() {
+            return executionTime;
+        }
+    }
+        
 }

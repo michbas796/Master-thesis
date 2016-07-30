@@ -8,7 +8,8 @@ import michal.basak.sop.genetic_algorithm.selection.*;
 public class GeneticAlgorithmParams {
         int maxGenerationsNumber;        
         int populationSize;               
-        double mutationProbability;        
+        double mutationProbability;
+        long maxExecutionTimeInMilliseconds;
         IndividualFactory individualFactory;
         IndividualSelector selector;
         PopulationReplacer replacer;
@@ -50,6 +51,10 @@ public class GeneticAlgorithmParams {
         
         public void setMutationProbability(double mutationProbability) {
             this.mutationProbability = mutationProbability;
+        }
+        
+        public void setMaxExecutionTimeInMilliseconds(long maxExecutionTimeInMilliseconds) {
+            this.maxExecutionTimeInMilliseconds = maxExecutionTimeInMilliseconds;
         }
         
         public enum StopCondition {
