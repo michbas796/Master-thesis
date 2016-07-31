@@ -3,11 +3,7 @@ package michal.basak.sop.application;
 import michal.basak.sop.genetic_algorithm.*;
 import michal.basak.sop.genetic_algorithm.population_replacing.*;
 import michal.basak.sop.genetic_algorithm.selection.*;
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.ListeningExecutorService;
-import com.google.common.util.concurrent.MoreExecutors;
+import com.google.common.util.concurrent.*;
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.Executors;
@@ -40,7 +36,7 @@ public class Application {
                     public void onSuccess(GeneticAlgorithm.Results results) {                                                                     
                         System.out.println(results.getBestIndividual().getFitness());
                         System.out.println(results.getBestIndividual().getChrmosome());
-                        System.out.println(results.getMeanPopulationFitness());
+                        System.out.println(results.getMeanPopulationFitnesses());
                         System.out.println("Czas wykonania: " + results.getExecutionTimeInMilliseconds() + "ms");
                         executorService.shutdown();
                     }
@@ -54,7 +50,7 @@ public class Application {
             }
         }                 
     }
-    
+          
     private static void setAlgorithmParameters(){
         for (int i = 0; i < inputParams.length; i++) {
             try {

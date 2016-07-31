@@ -1,8 +1,7 @@
 package michal.basak.sop.genetic_algorithm;
 
 import michal.basak.sop.genetic_algorithm.individuals.IndividualFactory;
-import michal.basak.sop.genetic_algorithm.population_replacing.FullReplacer;
-import michal.basak.sop.genetic_algorithm.population_replacing.PopulationReplacer;
+import michal.basak.sop.genetic_algorithm.population_replacing.*;
 import michal.basak.sop.genetic_algorithm.selection.*;
 
 public class GeneticAlgorithmParams {
