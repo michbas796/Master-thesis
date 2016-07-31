@@ -1,16 +1,15 @@
 package michal.basak.sop.genetic_algorithm;
 
 import com.google.common.base.Stopwatch;
-import java.util.concurrent.Callable;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
 import michal.basak.sop.genetic_algorithm.individuals.Individual;
 
 public class GeneticAlgorithm implements Callable<GeneticAlgorithm.Results> {
     private int currentGenerationNumber;
     private Population population;
     private Population selectedIndividuals;
-    private Population offspringsPopulation;           
-    private double prevMeanPopulationFitness;
+    private Population offspringsPopulation;               
     private GeneticAlgorithmParams params;
     private int generationsWithNoFitnessProgress;
     private final CitiesGraph citiesGraph;
@@ -50,7 +49,8 @@ public class GeneticAlgorithm implements Callable<GeneticAlgorithm.Results> {
             case GENERATIONS_NUMBER:
                 return currentGenerationNumber < params.maxGenerationsNumber;
             case MEAN_FITNESS:
-                if (results.meanPopulationFitness <= prevMeanPopulationFitness) {
+                int lastElement = results.meanPopulationFitness.size() - 1;
+                if (lastElement >= 1 && results.meanPopulationFitness.get(lastElement) >= results.meanPopulationFitness.get(lastElement - 1)) {
                     generationsWithNoFitnessProgress++;
                 } else {
                     generationsWithNoFitnessProgress = 0;
@@ -80,7 +80,7 @@ public class GeneticAlgorithm implements Callable<GeneticAlgorithm.Results> {
         for (Individual i : population) {
             individualsFitnessSum += i.getFitness();
         }
-        results.meanPopulationFitness = individualsFitnessSum / population.size();
+        results.meanPopulationFitness.add((double)individualsFitnessSum / population.size());
     }
         
     private void selectIndividuals() {
@@ -117,14 +117,18 @@ public class GeneticAlgorithm implements Callable<GeneticAlgorithm.Results> {
                
     public class Results {
         Individual bestIndividual;
-        double meanPopulationFitness;
+        List<Double> meanPopulationFitness;
         long executionTime;
+        
+        private Results() {
+            meanPopulationFitness = new ArrayList<>();
+        }
         
         public Individual getBestIndividual() {
             return bestIndividual;
         }
         
-        public double getMeanPopulationFitness() {
+        public List<Double> getMeanPopulationFitnesses() {
             return meanPopulationFitness;
         }
         
