@@ -36,6 +36,10 @@ public class CitiesGraph {
         return adjacencyMatrix.size();
     }
     
+    public List<Integer> getPrecedenceConstraintsOfNode(int nodeNumber) {
+        return precedenceConstraints.get(nodeNumber);
+    }
+    
     private void loadAdjacencyMatrixFromFile(File inputFile) {
         try (BufferedReader fileReader = new BufferedReader(new FileReader(inputFile))) {            
             String currentLine;               
@@ -60,7 +64,7 @@ public class CitiesGraph {
         }  
     }
       
-     private void assignPrecedenceConstraints() {         
+    private void assignPrecedenceConstraints() {         
         precedenceConstraints = new ArrayList<>();
         for (int rowNum = 0; rowNum < adjacencyMatrix.size(); rowNum++) {
             List<Integer> row = adjacencyMatrix.get(rowNum);
@@ -73,7 +77,7 @@ public class CitiesGraph {
             precedenceConstraints.add(currentCityPrecedenceConstraints);
         }
     }
-      
+                
     private class HamiltonianPath {
         private final List<Integer> path;
         private final int numberOfNodes;
