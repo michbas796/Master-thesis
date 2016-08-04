@@ -68,21 +68,28 @@ public class CitiesGraphTest {
     /**
      * Test of getRandomHamiltonianPath method, of class CitiesGraph.
      */
-    @org.junit.Test
+    
     public void testGetRandomHamiltonianPath() {
         System.out.println("getRandomHamiltonianPath");             
         List<Integer> path = citiesGraph.getRandomHamiltonianPath();
         for (int i = 0; i < path.size() - 1; i++) {
-            for (int j = 1; j < path.size(); j++) {
-                assertNotEquals("Nieprawidłowa kolejność węzłów: " + path.get(i) + " i " + path.get(j), -1, citiesGraph.weightOfEdge(path.get(i), path.get(j)));                
+            for (int j = i + 1; j < path.size(); j++) {
+                assertNotEquals("Nieprawidłowa kolejność węzłów: " + path.get(i) + " i " + path.get(j) + "\n" + path.toString(), -1, citiesGraph.weightOfEdge(path.get(i), path.get(j)));                
             }
         }             
+    }
+    
+    @Test
+    public void testMultipleInvocationOfGetRandomHamiltionianPath() {
+        for (int i = 0; i < 100000; i++) {
+            testGetRandomHamiltonianPath();
+        }
     }
 
     /**
      * Test of getEmptyPath method, of class CitiesGraph.
      */
-    @org.junit.Test
+    @Test
     public void testGetEmptyPath() {
         System.out.println("getEmptyPath");               
         List<Integer> result = citiesGraph.getEmptyPath();
