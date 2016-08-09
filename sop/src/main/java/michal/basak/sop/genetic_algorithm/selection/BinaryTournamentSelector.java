@@ -1,10 +1,10 @@
 package michal.basak.sop.genetic_algorithm.selection;
 
-import java.util.Random;
 import michal.basak.sop.genetic_algorithm.Population;
 import michal.basak.sop.genetic_algorithm.individuals.Individual;
+import michal.basak.sop.helpers.RandomInteger;
 
-public class BinaryTournamentSelector extends IndividualSelector{
+public class BinaryTournamentSelector implements IndividualSelector {
 
     @Override
     public Population selectIndividualsFrom(Population population) {
@@ -12,19 +12,19 @@ public class BinaryTournamentSelector extends IndividualSelector{
         for (int i = 0; i < population.size(); i++) {
             selectedIndividuals.add(bestIndividualFromTwoRandomlySelected(population));
         }
-        return selectedIndividuals;        
+        return selectedIndividuals;
     }
-    
+
     private Individual bestIndividualFromTwoRandomlySelected(Population population) {
-        Random random = new Random();
-        int firstRandomIndex = random.nextInt(population.size());
-        int secondRandomIndex = random.nextInt(population.size());
+        RandomInteger random = RandomInteger.getInstance();
+        int firstRandomIndex = random.getFromRange(0, population.size());
+        int secondRandomIndex = random.getFromRange(0, population.size());
         Individual firstIndividual = population.getIndividual(firstRandomIndex);
         Individual secondIndividual = population.getIndividual(secondRandomIndex);
-        if (firstIndividual.getFitness() < secondIndividual.getFitness()) {
+        if (firstIndividual.getCost() < secondIndividual.getCost()) {
             return firstIndividual;
         }
         return secondIndividual;
     }
-    
+
 }

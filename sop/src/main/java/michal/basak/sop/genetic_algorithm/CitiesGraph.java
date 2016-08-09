@@ -1,71 +1,61 @@
 package michal.basak.sop.genetic_algorithm;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 public class CitiesGraph {
-    public static final int PRECEDENCE_CONSTRAINT = -1;    
+
+    public static final int PRECEDENCE_CONSTRAINT = -1;
     private List<List<Integer>> adjacencyMatrix;
-    private List<List<Integer>> precedenceConstraints; 
-    
-    public CitiesGraph(File inputFile) {       
+    private List<List<Integer>> obligatoryPredecessors;
+    private int startNode;
+    private int endNode;
+    private final int NOT_FOUND = -1;
+
+    public CitiesGraph(File inputFile) {
         loadAdjacencyMatrixFromFile(inputFile);
-        assignPrecedenceConstraints();
+        assignObligatoryPredecessors();
+        findFirstAndLastNode();
     }
-    
+
     public int weightOfEdge(int startNode, int endNode) {
         return adjacencyMatrix.get(startNode).get(endNode);
     }
-    
-    public List<Integer> getRandomHamiltonianPath() {        
-        return new HamiltonianPath().generate();
-    }
-    
-    public List<Integer> getEmptyPath() {
-        return new HamiltonianPath().emptyPath();
-    }
-        
+
     public int numberOfCities() {
         return adjacencyMatrix.size();
     }
-    
-    public List<Integer> getPrecedenceConstraintsOfNode(int nodeNumber) {
-        return precedenceConstraints.get(nodeNumber);
+
+    public List<Integer> getObligatoryPredecessorsOfNode(int nodeNumber) {
+        return obligatoryPredecessors.get(nodeNumber);
     }
-    
+
     private void loadAdjacencyMatrixFromFile(File inputFile) {
-        try (BufferedReader fileReader = new BufferedReader(new FileReader(inputFile))) {            
-            String currentLine;               
+        try (BufferedReader fileReader = new BufferedReader(new FileReader(inputFile))) {
+            String currentLine;
             adjacencyMatrix = new ArrayList<>();
             while ((currentLine = fileReader.readLine()) != null) {
-                parseFileLine(currentLine);                         
-            }            
+                parseFileLine(currentLine);
+            }
         } catch (IOException e) {
-            //TODO prawdopodobnie powinno wyżucić nowy wyjątek.
+            //TODO prawdopodobnie powinno wyrzucić nowy wyjątek.
         }
     }
-    
+
     private void parseFileLine(String fileLine) {
         ArrayList<Integer> adjacencyMatrixRow = new ArrayList<>();
-        try (Scanner scanner = new Scanner(fileLine)) {            
+        try (Scanner scanner = new Scanner(fileLine)) {
             while (scanner.hasNextInt()) {
                 adjacencyMatrixRow.add(scanner.nextInt());
             }
         }
         if (adjacencyMatrixRow.size() > 1) {
             adjacencyMatrix.add(adjacencyMatrixRow);
-        }  
+        }
     }
-      
-    private void assignPrecedenceConstraints() {         
-        precedenceConstraints = new ArrayList<>();
+
+    private void assignObligatoryPredecessors() {
+        obligatoryPredecessors = new ArrayList<>();
         for (int rowNum = 0; rowNum < adjacencyMatrix.size(); rowNum++) {
             List<Integer> row = adjacencyMatrix.get(rowNum);
             List<Integer> currentCityPrecedenceConstraints = new ArrayList<>();
@@ -74,87 +64,37 @@ public class CitiesGraph {
                     currentCityPrecedenceConstraints.add(colNum);
                 }
             }
-            precedenceConstraints.add(currentCityPrecedenceConstraints);
+            obligatoryPredecessors.add(currentCityPrecedenceConstraints);
         }
     }
-                
-    private class HamiltonianPath {
-        private final List<Integer> path;
-        private final int numberOfNodes;
-        private int startNode;
-        private int endNode;
-        
-        private final int NOT_FOUND = -1;
-        
-        public HamiltonianPath() {
-            path = new LinkedList<>();
-            numberOfNodes = adjacencyMatrix.size();                        
-        }
-        
-        public List<Integer> generate() { 
-            findFirstAndLastNode();
-            path.add(startNode);
-            addRandomNodesToPath();
-            path.add(endNode);
-            repairRandomPath();
-            return path;
-        }
-        
-        public List<Integer> emptyPath() {
-            path.clear();
-            return path;
-        }
-        
-        private void addRandomNodesToPath() {
-            List<Integer> nodesToAdd = new ArrayList<>();
-            nodesToAdd.addAll(precedenceConstraints.get(endNode));            
-            nodesToAdd.remove((Integer)startNode); //TODO: do przemyślenia
-            while (nodesToAdd.size() > 0) {
-                path.add(takeRandomNodeFrom(nodesToAdd));
+
+    private void findFirstAndLastNode() {
+        startNode = NOT_FOUND;
+        endNode = NOT_FOUND;
+        int numberOfNodes = adjacencyMatrix.size();
+        for (int i = 0; i < obligatoryPredecessors.size(); i++) {
+            int numberOfConstraints = obligatoryPredecessors.get(i).size();
+            if (numberOfConstraints == 0) {
+                startNode = i;
+            } else if (numberOfConstraints == numberOfNodes - 1) {
+                endNode = i;
+            }
+            if (startNode != NOT_FOUND && endNode != NOT_FOUND) {
+                break;
             }
         }
-        
-        private void repairRandomPath() {
-            for (int currentNodeIndex = 1; currentNodeIndex < path.size() - 1; currentNodeIndex++) {
-                int currentNode = path.get(currentNodeIndex);
-                int successorIndex = currentNodeIndex + 1;
-                while (successorIndex < path.size()) {
-                    int successor = path.get(successorIndex);
-                    if (precedenceConstraints.get(currentNode).contains(successor)) {
-                        int tmp = path.set(currentNodeIndex, successor);
-                        path.set(successorIndex, tmp);
-                        currentNode = successor;
-                        continue;
-                    }
-                    successorIndex++;
-                }
-            }
-        }
-        
-        private void findFirstAndLastNode() {
-            startNode = NOT_FOUND;
-            endNode = NOT_FOUND;        
-            for (int i = 0; i < precedenceConstraints.size(); i++) {
-                int numberOfConstraints = precedenceConstraints.get(i).size();
-                if (numberOfConstraints == 0) {
-                    startNode = i;               
-                } else if (numberOfConstraints == numberOfNodes - 1) {
-                    endNode = i;
-                }
-                if (startNode != NOT_FOUND && endNode != NOT_FOUND) {
-                    break;
-                }
-            }
-        }
-                       
-        private int takeRandomNodeFrom(List<Integer> nodes) {
-            Random random = new Random();
-            int nodeIndex = random.nextInt(nodes.size());            
-            int result = nodes.get(nodeIndex); 
-            nodes.remove(nodeIndex);
-            return result;       
-        }
-                
     }
-               
+
+    public int getStartNode() {
+        return startNode;
+    }
+
+    public int getEndNode() {
+        return endNode;
+    }
+
+    public List<List<Integer>> getObligatoryPredecessors() {
+        return obligatoryPredecessors;
+    }
+
 }

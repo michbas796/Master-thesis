@@ -1,17 +1,17 @@
 package michal.basak.sop.genetic_algorithm.selection;
 
-import java.util.Random;
-import michal.basak.sop.genetic_algorithm.individuals.Individual;
 import michal.basak.sop.genetic_algorithm.Population;
+import michal.basak.sop.genetic_algorithm.individuals.Individual;
+import michal.basak.sop.helpers.RandomInteger;
 
-public class TournamentSelector extends IndividualSelector {
-    
+public class TournamentSelector implements IndividualSelector {
+
     int tournamentSize;
 
     public TournamentSelector(int tournamentSize) {
         this.tournamentSize = tournamentSize;
     }
-           
+
     @Override
     public Population selectIndividualsFrom(Population population) {
         Population selectedIndividuals = new Population();
@@ -20,16 +20,16 @@ public class TournamentSelector extends IndividualSelector {
         }
         return selectedIndividuals;
     }
-    
+
     private Individual bestIndividualFromTournament(Population population) {
-        Random random = new Random();       
+        RandomInteger random = RandomInteger.getInstance();
         Individual[] individualsInTournament = new Individual[tournamentSize];
         for (int i = 0; i < tournamentSize; i++) {
-            individualsInTournament[i] = population.getIndividual(random.nextInt(population.size()));
+            individualsInTournament[i] = population.getIndividual(random.getFromRange(0, population.size()));
         }
         int bestIndividualIndex = 0;
         for (int i = 1; i < tournamentSize; i++) {
-            if (individualsInTournament[i].getFitness() < individualsInTournament[bestIndividualIndex].getFitness()) {
+            if (individualsInTournament[i].getCost() < individualsInTournament[bestIndividualIndex].getCost()) {
                 bestIndividualIndex = i;
             }
         }
