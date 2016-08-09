@@ -77,9 +77,6 @@ public class Application {
                     case "-s":
                         algParams.setSelector(new StochasticUniversalSamplingSelector());
                         break;
-                    case "-bt":
-                        algParams.setSelector(new BinaryTournamentSelector());
-                        break;
                     case "-fr":
                         algParams.setReplacer(new FullReplacer());
                         break;
@@ -118,9 +115,8 @@ public class Application {
         System.out.println("-rpg generuje losowe trasy");
         System.out.println("-gpg tworzy trasy z użyciem fragmetów częściowo wygenerowanych przez algorytm zachłanny");
         System.out.println("Metoda selekcji:");
-        System.out.println("-rw | -ts <rozmiar turnieju> |-bt | -rs | -s ");
+        System.out.println("-rw | -ts <rozmiar turnieju> | -rs | -s ");
         System.out.println("-rw selekcja proporcjonalna (koło ruletki)");
-        System.out.println("-bt binarna selekcja turniejowa");
         System.out.println("-ts selekcja turniejowa");
         System.out.println("-s selekcja stochastyczna");
         System.out.println("Prawdopodobieństwo mutacji:");
@@ -151,7 +147,7 @@ public class Application {
                     printUsageNotesAndExit();
                 }
                 i++;
-            } else if (!inputParams[i].matches("-rw|-rs|-s|-fr|-bt|-rpg|-gpg")) {
+            } else if (!inputParams[i].matches("-rw|-rs|-s|-fr|-rpg|-gpg")) {
                 printUsageNotesAndExit();
             }
         }
@@ -163,7 +159,7 @@ public class Application {
     private static void assignParamsToGroups(String param) {
         if (param.matches("-g|-t|-mf")) {
             stopConditionParams.add(param);
-        } else if (param.matches("-rw|-rs|-ts|-s|-bt")) {
+        } else if (param.matches("-rw|-rs|-ts|-s")) {
             selectionMethodParams.add(param);
         } else if (param.matches("-fr|er")) {
             populationReplaceParams.add(param);
