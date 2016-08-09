@@ -59,29 +59,25 @@ public class Individual {
 
     private List<Integer> makeOffspringChromosome(List<Integer> firstParentChromosome, List<Integer> secondParentChromosome) {
         List<Integer> offspringChromosome = new LinkedList<>(); //TODO: do przemyślenia
-        int edgeStart = firstParentChromosome.get(1);
-        int edgeEnd = firstParentChromosome.get(2);
-
-        int firstParentEdgeElementIndex = 0;
-        for (int i = secondParentChromosome.size() - 1; i > 0; i--) {
-            int currentElement = secondParentChromosome.get(i);
-            if (currentElement == edgeStart || currentElement == edgeEnd) {
-                firstParentEdgeElementIndex = i;
-                break;
+        List<Integer> firstParentCopy = new LinkedList<>(firstParentChromosome);
+        int firstIndex = RandomInteger.getInstance().getFromRange(0, secondParentChromosome.size() - 2);
+        int secondIndex = RandomInteger.getInstance().getFromRange(firstIndex, secondParentChromosome.size());
+        List<Integer> secondParentFragment = secondParentChromosome.subList(firstIndex, secondIndex);
+        firstParentCopy.removeAll(secondParentFragment);
+        List<Integer> leftFragmentOfSecondParent = secondParentChromosome.subList(0, firstIndex);
+        int i = 0;
+        int addedGenes = 0;
+        while (addedGenes < leftFragmentOfSecondParent.size()) {
+            int gene = firstParentCopy.get(i);
+            if (leftFragmentOfSecondParent.contains(gene)) {
+                offspringChromosome.add(gene);
+                addedGenes++;
             }
+            i++;
         }
-
-        for (int i = 0; i <= firstParentEdgeElementIndex; i++) {
-            offspringChromosome.add(secondParentChromosome.get(i));
-        }
-
-        for (int i = 3; i < firstParentChromosome.size(); i++) {
-            int value = firstParentChromosome.get(i);
-            if (offspringChromosome.contains(value)) {
-                continue;
-            }
-            offspringChromosome.add(value);
-        }
+        firstParentCopy.removeAll(offspringChromosome);
+        offspringChromosome.addAll(secondParentFragment);
+        offspringChromosome.addAll(firstParentCopy);
         return offspringChromosome;
     }
 
