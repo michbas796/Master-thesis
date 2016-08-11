@@ -1,9 +1,9 @@
 package michal.basak.sop.genetic_algorithm;
 
-import com.google.common.base.Stopwatch;
+import com.google.common.base.*;
 import java.util.*;
 import java.util.concurrent.*;
-import michal.basak.sop.genetic_algorithm.individuals.Individual;
+import michal.basak.sop.genetic_algorithm.individuals.*;
 
 public class GeneticAlgorithm implements Callable<GeneticAlgorithm.Results> {
 
@@ -19,6 +19,8 @@ public class GeneticAlgorithm implements Callable<GeneticAlgorithm.Results> {
     public GeneticAlgorithm(GeneticAlgorithmParams params) {
         this.params = params;
         population = new Population();
+        selectedIndividuals = new Population();
+        offspringsPopulation = new Population();
         results = new Results();
     }
 
@@ -83,11 +85,11 @@ public class GeneticAlgorithm implements Callable<GeneticAlgorithm.Results> {
     }
 
     private void selectIndividuals() {
-        selectedIndividuals = params.selector.selectIndividualsFrom(population);
+        params.selector.selectIndividuals(population, selectedIndividuals);
     }
 
     private void createOffspringsPopulation() {
-        offspringsPopulation = new Population();
+        offspringsPopulation.clear();
         for (int i = 0; i < selectedIndividuals.size() - 1; i += 2) {
             Individual firstParent = selectedIndividuals.getIndividual(i);
             Individual secondParent = selectedIndividuals.getIndividual(i + 1);
@@ -101,7 +103,7 @@ public class GeneticAlgorithm implements Callable<GeneticAlgorithm.Results> {
 
     private void replacePopulation() {
         currentGenerationNumber++;
-        population = params.replacer.replace(population, offspringsPopulation);
+        params.replacer.replace(population, offspringsPopulation);
         evaluateMeanCost();
         findNewBestIndividual();
     }

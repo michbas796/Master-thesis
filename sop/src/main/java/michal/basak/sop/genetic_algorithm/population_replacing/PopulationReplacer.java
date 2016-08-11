@@ -1,8 +1,8 @@
 package michal.basak.sop.genetic_algorithm.population_replacing;
 
-import michal.basak.sop.genetic_algorithm.Population;
+import michal.basak.sop.genetic_algorithm.*;
 
 public interface PopulationReplacer {
 
-    Population replace(Population currentPopulation, Population offspringsPopulation);
+    void replace(Population currentPopulation, Population offspringsPopulation);
 }
