@@ -8,20 +8,20 @@ import michal.basak.sop.genetic_algorithm.individuals.*;
 public class GeneticAlgorithm implements Callable<GeneticAlgorithm.Results> {
 
     private int currentGenerationNumber;
-    private Population population;
-    private Population selectedIndividuals;
-    private Population offspringsPopulation;
     private GeneticAlgorithmParams params;
     private int generationsWithNoFitnessProgress;
-    private final Results results;
     private Stopwatch stopwatch;
+    private final Population population = new Population();
+    private final Population selectedIndividuals = new Population();
+    private final Population offspringsPopulation = new Population();
+    private final Results results = new Results();
+    private final Mutation mutation;
+    private final IndividualFactory individualFactory;
 
     public GeneticAlgorithm(GeneticAlgorithmParams params) {
         this.params = params;
-        population = new Population();
-        selectedIndividuals = new Population();
-        offspringsPopulation = new Population();
-        results = new Results();
+        mutation = new Mutation(params.citiesGraph);
+        individualFactory = new IndividualFactory(params.citiesGraph, params.pathGenerator);
     }
 
     @Override
@@ -29,7 +29,7 @@ public class GeneticAlgorithm implements Callable<GeneticAlgorithm.Results> {
         stopwatch = Stopwatch.createStarted();
         prepareFirstPopulation();
         while (isNextGeneration()) {
-            selectIndividuals();
+            params.selector.selectIndividuals(population, selectedIndividuals);
             createOffspringsPopulation();
             replacePopulation();
         }
@@ -69,7 +69,7 @@ public class GeneticAlgorithm implements Callable<GeneticAlgorithm.Results> {
         generationsWithNoFitnessProgress = 0;
         Individual newIndividual;
         for (int i = 0; i < params.populationSize; i++) {
-            newIndividual = params.individualFactory.createIndividual(params.citiesGraph, params.pathGenerator);
+            newIndividual = individualFactory.createIndividual();
             population.add(newIndividual);
         }
         evaluateMeanCost();
@@ -84,20 +84,21 @@ public class GeneticAlgorithm implements Callable<GeneticAlgorithm.Results> {
         results.meanPopulationCost.add((double) individualsCostSum / population.size());
     }
 
-    private void selectIndividuals() {
-        params.selector.selectIndividuals(population, selectedIndividuals);
-    }
-
     private void createOffspringsPopulation() {
         offspringsPopulation.clear();
         for (int i = 0; i < selectedIndividuals.size() - 1; i += 2) {
-            Individual firstParent = selectedIndividuals.getIndividual(i);
-            Individual secondParent = selectedIndividuals.getIndividual(i + 1);
-            Individual.Offsprings offsprings = firstParent.crossoverWith(secondParent);
-            offsprings.getFirst().mutate(params.mutationProbability);
-            offsprings.getSecond().mutate(params.mutationProbability);
-            offspringsPopulation.add(offsprings.getFirst());
-            offspringsPopulation.add(offsprings.getSecond());
+            List<Integer> firstParentChromosome = selectedIndividuals.getIndividual(i).getChromosome();
+            List<Integer> secondParentChromosome = selectedIndividuals.getIndividual(i + 1).getChromosome();
+            List<Integer> firstOffspringChromosome = params.crossover.makeOffspringChromosome(firstParentChromosome, secondParentChromosome);
+            List<Integer> secondOffspringChromosome = params.crossover.makeOffspringChromosome(secondParentChromosome, firstParentChromosome);
+            if (Math.random() < params.mutationProbability) {
+                mutation.changeChromosome(firstOffspringChromosome);
+            }
+            if (Math.random() < params.mutationProbability) {
+                mutation.changeChromosome(secondOffspringChromosome);
+            }
+            offspringsPopulation.add(individualFactory.createIndividual(firstOffspringChromosome));
+            offspringsPopulation.add(individualFactory.createIndividual(secondOffspringChromosome));
         }
     }
 

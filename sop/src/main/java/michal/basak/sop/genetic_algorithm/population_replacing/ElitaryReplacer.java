@@ -4,23 +4,25 @@ import michal.basak.sop.genetic_algorithm.*;
 
 public class ElitaryReplacer implements PopulationReplacer {
 
-    int eliteSize;
-    Population nextPopulation = new Population();
+    private final int ELITE_SIZE;
+    private final Population nextPopulation = new Population();
 
     public ElitaryReplacer(int eliteSize) {
-        this.eliteSize = eliteSize;
+        this.ELITE_SIZE = eliteSize;
     }
 
     @Override
     public void replace(Population currentPopulation, Population offspringsPopulation) {
         nextPopulation.clear();
         currentPopulation.sortFromBestToWorst();
-        for (int i = 0; i < eliteSize; i++) {
-            nextPopulation.add(offspringsPopulation.getIndividual(i));
+        for (int i = 0; i < ELITE_SIZE; i++) {
+            nextPopulation.add(currentPopulation.getIndividual(i));
         }
         offspringsPopulation.sortFromBestToWorst();
-        for (int i = 0; i < offspringsPopulation.size() - eliteSize; i++) {
-            nextPopulation.add(offspringsPopulation.getIndividual(i));
+        for (int i = 0; i < offspringsPopulation.size() - ELITE_SIZE; i++) {
+            nextPopulation.add(offspringsPopulation.removeIndividual(i));
         }
+        currentPopulation.clear();
+        currentPopulation.addAll(nextPopulation);
     }
 }

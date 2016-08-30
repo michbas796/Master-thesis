@@ -1,14 +1,13 @@
 package michal.basak.sop.genetic_algorithm.path_generation;
 
-import java.util.LinkedList;
-import java.util.List;
-import michal.basak.sop.genetic_algorithm.CitiesGraph;
+import java.util.*;
+import michal.basak.sop.genetic_algorithm.*;
 
 public abstract class PathGenerator {
 
     protected final List<Integer> path;
     protected final CitiesGraph citiesGraph;
-    protected final List<List<Integer>> obligatoryPredecessors;
+    protected final List<Set<Integer>> obligatoryPredecessors;
     protected final int startNode;
     protected final int endNode;
     protected final List<Integer> acceptableNodes;
@@ -27,7 +26,7 @@ public abstract class PathGenerator {
     public abstract List<Integer> generate();
 
     protected void findAcceptableNodes() {
-        List<Integer> currentNodeObligatoryPredecessors;
+        Set<Integer> currentNodeObligatoryPredecessors;
         boolean pathContainsAllObligatoryPredecessorsOfCurrentNode;
         acceptableNodes.clear();
         for (int i = 1; i < pathLength - 1; i++) {

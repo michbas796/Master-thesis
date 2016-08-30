@@ -1,7 +1,5 @@
 package michal.basak.sop.helpers;
 
-import java.util.concurrent.*;
-
 public class RandomInteger {
 
     public static RandomInteger getInstance() {
@@ -13,7 +11,25 @@ public class RandomInteger {
     }
 
     public int getFromRange(int lowerBound, int upperBound) {
-        return ThreadLocalRandom.current().nextInt(upperBound - lowerBound) + lowerBound;
+        int numberOfIntegers = upperBound - lowerBound;
+        int indexOfSelectedInteger = 0;
+        if (numberOfIntegers > 1) {
+            double[] distribution = new double[numberOfIntegers];
+            double distributionValue = 0;
+            for (int i = 0; i < distribution.length; i++) {
+                distributionValue += 1.0 / numberOfIntegers;
+                distribution[i] = distributionValue;
+            }
+            double random = Math.random();
+
+            for (int i = 0; i < distribution.length; i++) {
+                if (random < distribution[i]) {
+                    indexOfSelectedInteger = i;
+                    break;
+                }
+            }
+        }
+        return lowerBound + indexOfSelectedInteger;
     }
 
     private static class RandomIntegerHolder {

@@ -12,10 +12,10 @@ public class Application {
     private static String[] inputParams;
     private static CitiesGraph citiesGraph;
     private static GeneticAlgorithmParams algParams;
-    private static List<String> stopConditionParams = new ArrayList<>();
-    private static List<String> selectionMethodParams = new ArrayList<>();
-    private static List<String> populationReplaceParams = new ArrayList<>();
-    private static List<String> pathGenerationParams = new ArrayList<>();
+    private static final List<String> STOP_CONDITION_PARAMS = new ArrayList<>();
+    private static final List<String> SELECTION_METHOD_PARAMS = new ArrayList<>();
+    private static final List<String> POPULATION_REPLACE_PARAMS = new ArrayList<>();
+    private static final List<String> PATH_GENERATION_PARAMS = new ArrayList<>();
 
     /**
      * @param args the command line arguments
@@ -32,14 +32,18 @@ public class Application {
                 setAlgorithmParameters();
                 GeneticAlgorithm algorithm = new GeneticAlgorithm(algParams);
                 GeneticAlgorithm.Results results = algorithm.call();
-                System.out.println(results.getBestIndividual().getCost());
-                System.out.println(results.getBestIndividual().getChromosome());
-                System.out.println(results.getMeanPopulationCost());
-                System.out.println("Czas wykonania: " + results.getExecutionTimeInMilliseconds() + "ms");
+                print(results);
             } else {
                 printUsageNotesAndExit();
             }
         }
+    }
+
+    private static void print(GeneticAlgorithm.Results results) {
+        System.out.println(results.getBestIndividual().getCost());
+        System.out.println(results.getBestIndividual().getChromosome());
+        System.out.println(results.getMeanPopulationCost());
+        System.out.println("Czas wykonania: " + results.getExecutionTimeInMilliseconds() + "ms");
     }
 
     private static void setAlgorithmParameters() {
@@ -151,20 +155,20 @@ public class Application {
                 printUsageNotesAndExit();
             }
         }
-        if (stopConditionParams.size() > 1 || selectionMethodParams.size() > 1 || populationReplaceParams.size() > 1 || pathGenerationParams.size() > 1) {
+        if (STOP_CONDITION_PARAMS.size() > 1 || SELECTION_METHOD_PARAMS.size() > 1 || POPULATION_REPLACE_PARAMS.size() > 1 || PATH_GENERATION_PARAMS.size() > 1) {
             printUsageNotesAndExit();
         }
     }
 
     private static void assignParamsToGroups(String param) {
         if (param.matches("-g|-t|-mf")) {
-            stopConditionParams.add(param);
+            STOP_CONDITION_PARAMS.add(param);
         } else if (param.matches("-rw|-rs|-ts|-s")) {
-            selectionMethodParams.add(param);
+            SELECTION_METHOD_PARAMS.add(param);
         } else if (param.matches("-fr|er")) {
-            populationReplaceParams.add(param);
+            POPULATION_REPLACE_PARAMS.add(param);
         } else if (param.matches("-rpg|-gpg")) {
-            pathGenerationParams.add(param);
+            PATH_GENERATION_PARAMS.add(param);
         }
     }
 }

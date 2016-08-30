@@ -7,7 +7,7 @@ public class CitiesGraph {
 
     public static final int PRECEDENCE_CONSTRAINT = -1;
     private List<List<Integer>> adjacencyMatrix;
-    private List<List<Integer>> obligatoryPredecessors;
+    private List<Set<Integer>> obligatoryPredecessors;
     private int startNode;
     private int endNode;
     private final int NOT_FOUND = -1;
@@ -26,7 +26,7 @@ public class CitiesGraph {
         return adjacencyMatrix.size();
     }
 
-    public List<Integer> getObligatoryPredecessorsOfNode(int nodeNumber) {
+    public Set<Integer> getObligatoryPredecessorsOfNode(int nodeNumber) {
         return obligatoryPredecessors.get(nodeNumber);
     }
 
@@ -58,7 +58,7 @@ public class CitiesGraph {
         obligatoryPredecessors = new ArrayList<>();
         for (int rowNum = 0; rowNum < adjacencyMatrix.size(); rowNum++) {
             List<Integer> row = adjacencyMatrix.get(rowNum);
-            List<Integer> currentCityPrecedenceConstraints = new ArrayList<>();
+            Set<Integer> currentCityPrecedenceConstraints = new HashSet<>();
             for (int colNum = 0; colNum < adjacencyMatrix.size(); colNum++) {
                 if (row.get(colNum) == PRECEDENCE_CONSTRAINT) {
                     currentCityPrecedenceConstraints.add(colNum);
@@ -93,7 +93,7 @@ public class CitiesGraph {
         return endNode;
     }
 
-    public List<List<Integer>> getObligatoryPredecessors() {
+    public List<Set<Integer>> getObligatoryPredecessors() {
         return obligatoryPredecessors;
     }
 

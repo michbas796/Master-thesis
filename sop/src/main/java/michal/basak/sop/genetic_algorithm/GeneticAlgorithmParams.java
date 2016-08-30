@@ -1,6 +1,6 @@
 package michal.basak.sop.genetic_algorithm;
 
-import michal.basak.sop.genetic_algorithm.individuals.*;
+import michal.basak.sop.genetic_algorithm.crossover.*;
 import michal.basak.sop.genetic_algorithm.path_generation.*;
 import michal.basak.sop.genetic_algorithm.population_replacing.*;
 import michal.basak.sop.genetic_algorithm.selection.*;
@@ -12,9 +12,9 @@ public class GeneticAlgorithmParams {
     double mutationProbability;
     long maxExecutionTimeInMilliseconds;
     CitiesGraph citiesGraph;
-    IndividualFactory individualFactory;
     PathGenerator pathGenerator;
     IndividualSelector selector;
+    Crossover crossover;
     PopulationReplacer replacer;
     StopCondition stopCondition;
 
@@ -23,9 +23,9 @@ public class GeneticAlgorithmParams {
         maxGenerationsNumber = 10000;
         populationSize = 10;
         mutationProbability = 0.001;
-        individualFactory = new IndividualFactory();
         pathGenerator = new RandomPathGenerator(citiesGraph);
         selector = new RouletteWheelSelector();
+        crossover = new MaxPartialOrderCrossover(citiesGraph);
         replacer = new FullReplacer();
         stopCondition = StopCondition.GENERATIONS_NUMBER;
     }
@@ -46,12 +46,12 @@ public class GeneticAlgorithmParams {
         this.selector = selector;
     }
 
-    public void setReplacer(PopulationReplacer replacer) {
-        this.replacer = replacer;
+    public void setCrossover(Crossover crossover) {
+        this.crossover = crossover;
     }
 
-    public void setIndividalFactory(IndividualFactory individualFactory) {
-        this.individualFactory = individualFactory;
+    public void setReplacer(PopulationReplacer replacer) {
+        this.replacer = replacer;
     }
 
     public void setStopCondition(StopCondition stopCondition) {
