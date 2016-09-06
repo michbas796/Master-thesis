@@ -4,7 +4,7 @@ import java.util.*;
 import michal.basak.sop.genetic_algorithm.*;
 import michal.basak.sop.helpers.*;
 
-public class RandomPathGenerator extends PathGenerator {
+public class RandomPathGenerator extends AbstractPathGenerator {
 
     public RandomPathGenerator(CitiesGraph citiesGraph) {
         super(citiesGraph);
@@ -14,7 +14,7 @@ public class RandomPathGenerator extends PathGenerator {
     public List<Integer> generate() {
         path.clear();
         path.add(startNode);
-        for (int i = 0; path.size() < pathLength - 1; i++) {
+        while (path.size() < pathLength - 1) {
             path.add(randomAcceptableNode());
         }
         path.add(endNode);

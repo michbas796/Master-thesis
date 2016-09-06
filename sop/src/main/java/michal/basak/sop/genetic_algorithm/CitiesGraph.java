@@ -2,15 +2,16 @@ package michal.basak.sop.genetic_algorithm;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.*;
 
 public class CitiesGraph {
 
     public static final int PRECEDENCE_CONSTRAINT = -1;
     private List<List<Integer>> adjacencyMatrix;
-    private List<Set<Integer>> obligatoryPredecessors;
+    private Map<Integer, Set<Integer>> obligatoryPredecessors;
     private int startNode;
     private int endNode;
-    private final int NOT_FOUND = -1;
+    private final int NODE_NOT_FOUND = -1;
 
     public CitiesGraph(File inputFile) {
         loadAdjacencyMatrixFromFile(inputFile);
@@ -55,34 +56,26 @@ public class CitiesGraph {
     }
 
     private void assignObligatoryPredecessors() {
-        obligatoryPredecessors = new ArrayList<>();
+        obligatoryPredecessors = new HashMap<>();
         for (int rowNum = 0; rowNum < adjacencyMatrix.size(); rowNum++) {
             List<Integer> row = adjacencyMatrix.get(rowNum);
             Set<Integer> currentCityPrecedenceConstraints = new HashSet<>();
-            for (int colNum = 0; colNum < adjacencyMatrix.size(); colNum++) {
-                if (row.get(colNum) == PRECEDENCE_CONSTRAINT) {
-                    currentCityPrecedenceConstraints.add(colNum);
-                }
-            }
-            obligatoryPredecessors.add(currentCityPrecedenceConstraints);
+            IntStream.range(0, adjacencyMatrix.size())
+                    .filter(i -> row.get(i) == PRECEDENCE_CONSTRAINT)
+                    .forEach(currentCityPrecedenceConstraints::add);
+            obligatoryPredecessors.put(rowNum, currentCityPrecedenceConstraints);
         }
     }
 
     private void findFirstAndLastNode() {
-        startNode = NOT_FOUND;
-        endNode = NOT_FOUND;
-        int numberOfNodes = adjacencyMatrix.size();
-        for (int i = 0; i < obligatoryPredecessors.size(); i++) {
-            int numberOfConstraints = obligatoryPredecessors.get(i).size();
-            if (numberOfConstraints == 0) {
-                startNode = i;
-            } else if (numberOfConstraints == numberOfNodes - 1) {
-                endNode = i;
-            }
-            if (startNode != NOT_FOUND && endNode != NOT_FOUND) {
-                break;
-            }
-        }
+        startNode = obligatoryPredecessors.entrySet().stream()
+                .filter(nodesToPredecessorsSetMap -> nodesToPredecessorsSetMap.getValue().isEmpty())
+                .map(nodesToPredecessorsSetMap -> nodesToPredecessorsSetMap.getKey())
+                .findFirst().orElse(NODE_NOT_FOUND);
+        endNode = obligatoryPredecessors.entrySet().stream()
+                .filter(nodesToPredecessorsSetMap -> nodesToPredecessorsSetMap.getValue().size() == numberOfCities() - 1)
+                .map(nodesToPredecessorsSetMap -> nodesToPredecessorsSetMap.getKey())
+                .findFirst().orElse(NODE_NOT_FOUND);
     }
 
     public int getStartNode() {
@@ -93,7 +86,7 @@ public class CitiesGraph {
         return endNode;
     }
 
-    public List<Set<Integer>> getObligatoryPredecessors() {
+    public Map<Integer, Set<Integer>> getObligatoryPredecessors() {
         return obligatoryPredecessors;
     }
 

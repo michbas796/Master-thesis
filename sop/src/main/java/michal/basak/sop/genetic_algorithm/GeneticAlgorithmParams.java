@@ -38,7 +38,7 @@ public class GeneticAlgorithmParams {
         this.populationSize = populationSize;
     }
 
-    public void setPathGenerator(PathGenerator pathGenerator) {
+    public void setPathGenerator(AbstractPathGenerator pathGenerator) {
         this.pathGenerator = pathGenerator;
     }
 

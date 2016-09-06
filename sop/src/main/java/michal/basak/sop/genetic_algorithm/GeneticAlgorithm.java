@@ -4,6 +4,7 @@ import com.google.common.base.*;
 import java.util.*;
 import java.util.concurrent.*;
 import michal.basak.sop.genetic_algorithm.individuals.*;
+import michal.basak.sop.genetic_algorithm.mutation.*;
 
 public class GeneticAlgorithm implements Callable<GeneticAlgorithm.Results> {
 
@@ -20,7 +21,7 @@ public class GeneticAlgorithm implements Callable<GeneticAlgorithm.Results> {
 
     public GeneticAlgorithm(GeneticAlgorithmParams params) {
         this.params = params;
-        mutation = new Mutation(params.citiesGraph);
+        mutation = new RightPathExchangeMutation(params.citiesGraph);
         individualFactory = new IndividualFactory(params.citiesGraph, params.pathGenerator);
     }
 
@@ -29,7 +30,7 @@ public class GeneticAlgorithm implements Callable<GeneticAlgorithm.Results> {
         stopwatch = Stopwatch.createStarted();
         prepareFirstPopulation();
         while (isNextGeneration()) {
-            params.selector.selectIndividuals(population, selectedIndividuals);
+            selectIndividuals();
             createOffspringsPopulation();
             replacePopulation();
         }
@@ -40,7 +41,7 @@ public class GeneticAlgorithm implements Callable<GeneticAlgorithm.Results> {
 
     private void findNewBestIndividual() {
         Individual currentBest = population.getBestIndividual();
-        if (currentBest.getCost() < results.bestIndividual.getCost()) {
+        if (currentBest.cost() < results.bestIndividual.cost()) {
             results.bestIndividual = currentBest;
         }
     }
@@ -67,28 +68,31 @@ public class GeneticAlgorithm implements Callable<GeneticAlgorithm.Results> {
     private void prepareFirstPopulation() {
         currentGenerationNumber = 0;
         generationsWithNoFitnessProgress = 0;
-        Individual newIndividual;
         for (int i = 0; i < params.populationSize; i++) {
-            newIndividual = individualFactory.createIndividual();
-            population.add(newIndividual);
+            population.add(individualFactory.createIndividual());
         }
         evaluateMeanCost();
         results.bestIndividual = population.getBestIndividual();
     }
 
     private void evaluateMeanCost() {
-        int individualsCostSum = 0;
-        for (Individual i : population) {
-            individualsCostSum += i.getCost();
-        }
-        results.meanPopulationCost.add((double) individualsCostSum / population.size());
+        double meanCost = population.stream()
+                .mapToInt((individual) -> individual.cost())
+                .average().getAsDouble();
+        results.meanPopulationCost.add(meanCost);
+    }
+
+    private void selectIndividuals() {
+        Population currentlySelectedIndviduals = params.selector.selectIndividualsFrom(population);
+        selectedIndividuals.clear();
+        selectedIndividuals.addAll(currentlySelectedIndviduals);
     }
 
     private void createOffspringsPopulation() {
         offspringsPopulation.clear();
         for (int i = 0; i < selectedIndividuals.size() - 1; i += 2) {
-            List<Integer> firstParentChromosome = selectedIndividuals.getIndividual(i).getChromosome();
-            List<Integer> secondParentChromosome = selectedIndividuals.getIndividual(i + 1).getChromosome();
+            List<Integer> firstParentChromosome = selectedIndividuals.getIndividual(i).getChromosomeCopy();
+            List<Integer> secondParentChromosome = selectedIndividuals.getIndividual(i + 1).getChromosomeCopy();
             List<Integer> firstOffspringChromosome = params.crossover.makeOffspringChromosome(firstParentChromosome, secondParentChromosome);
             List<Integer> secondOffspringChromosome = params.crossover.makeOffspringChromosome(secondParentChromosome, firstParentChromosome);
             if (Math.random() < params.mutationProbability) {
@@ -104,7 +108,9 @@ public class GeneticAlgorithm implements Callable<GeneticAlgorithm.Results> {
 
     private void replacePopulation() {
         currentGenerationNumber++;
-        params.replacer.replace(population, offspringsPopulation);
+        population.clear();
+        Population newIndividuals = params.replacer.replace(population, offspringsPopulation);
+        population.addAll(newIndividuals);
         evaluateMeanCost();
         findNewBestIndividual();
     }

@@ -4,8 +4,10 @@ import michal.basak.sop.genetic_algorithm.*;
 
 public class StochasticUniversalSamplingSelector extends FitnessBasedSelector implements IndividualSelector {
 
+    private final Population selectedIndividuals = new Population();
+
     @Override
-    public void selectIndividuals(Population population, Population selectedIndividuals) {
+    public Population selectIndividualsFrom(Population population) {
         selectedIndividuals.clear();
         int populationSize = population.size();
         population.shuffle();
@@ -18,6 +20,7 @@ public class StochasticUniversalSamplingSelector extends FitnessBasedSelector im
                 pointer += distanceBetweenPointers;
             }
         }
+        return selectedIndividuals;
     }
 
 }

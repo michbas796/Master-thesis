@@ -17,10 +17,10 @@ public abstract class FitnessBasedSelector {
 
     protected static double[] evaluateFitness(Population population) {
         double[] fitness = new double[population.size()];
-        int highestCost = population.getWorstIndividual().getCost();
-        int lowestCost = population.getBestIndividual().getCost();
+        int highestCost = population.getWorstIndividual().cost();
+        int lowestCost = population.getBestIndividual().cost();
         for (int i = 0; i < population.size(); i++) {
-            fitness[i] = highestCost - population.getIndividual(i).getCost() + lowestCost;
+            fitness[i] = highestCost - population.getIndividual(i).cost() + lowestCost;
         }
         return fitness;
     }

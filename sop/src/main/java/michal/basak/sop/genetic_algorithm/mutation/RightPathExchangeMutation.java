@@ -1,9 +1,10 @@
-package michal.basak.sop.genetic_algorithm;
+package michal.basak.sop.genetic_algorithm.mutation;
 
 import java.util.*;
+import michal.basak.sop.genetic_algorithm.*;
 import michal.basak.sop.helpers.*;
 
-class Mutation {
+public class RightPathExchangeMutation implements Mutation {
 
     private int leftIndex;
     private int rightIndex;
@@ -13,10 +14,11 @@ class Mutation {
     private List<Integer> chromosome;
     private final CitiesGraph citiesGraph;
 
-    Mutation(CitiesGraph citiesGraph) {
+    public RightPathExchangeMutation(CitiesGraph citiesGraph) {
         this.citiesGraph = citiesGraph;
     }
 
+    @Override
     public void changeChromosome(List<Integer> chromosome) {
         this.chromosome = chromosome;
         evaluateIndices();

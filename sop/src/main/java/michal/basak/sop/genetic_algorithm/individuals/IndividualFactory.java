@@ -15,11 +15,22 @@ public class IndividualFactory {
     }
 
     public Individual createIndividual() {
-        return new Individual(citiesGraph, pathGenerator.generate());
+        List<Integer> chromosome = pathGenerator.generate();
+        return new Individual(chromosome, costOf(chromosome));
     }
 
     public Individual createIndividual(List<Integer> chromosome) {
-        return new Individual(citiesGraph, chromosome);
+        return new Individual(chromosome, costOf(chromosome));
+    }
+
+    private int costOf(List<Integer> chromosome) {
+        int cost = 0;
+        for (int i = 0; i < chromosome.size() - 1; i++) {
+            int edgeStart = chromosome.get(i);
+            int edgeEnd = chromosome.get(i + 1);
+            cost += citiesGraph.weightOfEdge(edgeStart, edgeEnd);
+        }
+        return cost;
     }
 
 }

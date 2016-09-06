@@ -5,9 +5,8 @@ import michal.basak.sop.genetic_algorithm.*;
 public class FullReplacer implements PopulationReplacer {
 
     @Override
-    public void replace(Population currentPopulation, Population offspringsPopulation) {
-        currentPopulation.clear();
-        currentPopulation.addAll(offspringsPopulation);
+    public Population replace(Population currentPopulation, Population offspringsPopulation) {
+        return offspringsPopulation;
     }
 
 }

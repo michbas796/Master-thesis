@@ -4,8 +4,10 @@ import michal.basak.sop.genetic_algorithm.*;
 
 public class RouletteWheelSelector extends FitnessBasedSelector implements IndividualSelector {
 
+    private final Population selectedIndividuals = new Population();
+
     @Override
-    public void selectIndividuals(Population population, Population selectedIndividuals) {
+    public Population selectIndividualsFrom(Population population) {
         selectedIndividuals.clear();
         double[] distributionFunction = evaluateDistributionFunction(population);
         for (int i = 0; i < population.size(); i++) {
@@ -17,6 +19,7 @@ public class RouletteWheelSelector extends FitnessBasedSelector implements Indiv
                 }
             }
         }
+        return selectedIndividuals;
     }
 
 }

@@ -12,7 +12,7 @@ public class ElitaryReplacer implements PopulationReplacer {
     }
 
     @Override
-    public void replace(Population currentPopulation, Population offspringsPopulation) {
+    public Population replace(Population currentPopulation, Population offspringsPopulation) {
         nextPopulation.clear();
         currentPopulation.sortFromBestToWorst();
         for (int i = 0; i < ELITE_SIZE; i++) {
@@ -22,7 +22,6 @@ public class ElitaryReplacer implements PopulationReplacer {
         for (int i = 0; i < offspringsPopulation.size() - ELITE_SIZE; i++) {
             nextPopulation.add(offspringsPopulation.removeIndividual(i));
         }
-        currentPopulation.clear();
-        currentPopulation.addAll(nextPopulation);
+        return nextPopulation;
     }
 }

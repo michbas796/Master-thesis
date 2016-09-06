@@ -39,7 +39,7 @@ public class GeneticAlgorithmTest {
     public void testCall() {
         GeneticAlgorithm.Results result = geneticAlgorithm.call();
         Individual foundIndividual = result.getBestIndividual();
-        List<Integer> path = foundIndividual.getChromosome();
+        List<Integer> path = foundIndividual.getChromosomeCopy();
         PathTest.test(path, citiesGraph);
     }
 

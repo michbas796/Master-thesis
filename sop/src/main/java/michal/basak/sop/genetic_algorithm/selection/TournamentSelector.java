@@ -8,6 +8,7 @@ public class TournamentSelector implements IndividualSelector {
 
     private int tournamentSize;
     private Individual[] individualsInTournament;
+    private Population selectedIndividuals = new Population();
 
     public TournamentSelector(int tournamentSize) {
         this.tournamentSize = tournamentSize;
@@ -15,11 +16,12 @@ public class TournamentSelector implements IndividualSelector {
     }
 
     @Override
-    public void selectIndividuals(Population population, Population selectedIndividuals) {
+    public Population selectIndividualsFrom(Population population) {
         selectedIndividuals.clear();
         for (int i = 0; i < population.size(); i++) {
             selectedIndividuals.add(bestIndividualFromTournament(population));
         }
+        return selectedIndividuals;
     }
 
     private Individual bestIndividualFromTournament(Population population) {
@@ -29,7 +31,7 @@ public class TournamentSelector implements IndividualSelector {
         }
         int bestIndividualIndex = 0;
         for (int i = 1; i < tournamentSize; i++) {
-            if (individualsInTournament[i].getCost() < individualsInTournament[bestIndividualIndex].getCost()) {
+            if (individualsInTournament[i].cost() < individualsInTournament[bestIndividualIndex].cost()) {
                 bestIndividualIndex = i;
             }
         }

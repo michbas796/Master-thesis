@@ -6,11 +6,7 @@ import michal.basak.sop.genetic_algorithm.individuals.*;
 public class Population extends AbstractCollection<Individual> {
 
     public static int totalCostOf(Population population) {
-        int costSum = 0;
-        for (Individual i : population) {
-            costSum += i.getCost();
-        }
-        return costSum;
+        return population.stream().map((i) -> i.cost()).reduce(0, Integer::sum);
     }
 
     private final ArrayList<Individual> individuals;
@@ -62,11 +58,11 @@ public class Population extends AbstractCollection<Individual> {
     }
 
     public void sortFromBestToWorst() {
-        individuals.sort((Individual i1, Individual i2) -> i1.getCost() - i2.getCost());
+        individuals.sort((Individual i1, Individual i2) -> i1.cost() - i2.cost());
     }
 
     public void sortFromWorstToBest() {
-        individuals.sort((Individual i1, Individual i2) -> i2.getCost() - i1.getCost());
+        individuals.sort((Individual i1, Individual i2) -> i2.cost() - i1.cost());
     }
 
     public void shuffle() {
@@ -74,11 +70,11 @@ public class Population extends AbstractCollection<Individual> {
     }
 
     public Individual getBestIndividual() {
-        return Collections.min(individuals, (Individual i1, Individual i2) -> i1.getCost() - i2.getCost());
+        return Collections.min(individuals, (Individual i1, Individual i2) -> i1.cost() - i2.cost());
     }
 
     public Individual getWorstIndividual() {
-        return Collections.max(individuals, (Individual i1, Individual i2) -> i1.getCost() - i2.getCost());
+        return Collections.max(individuals, (Individual i1, Individual i2) -> i1.cost() - i2.cost());
     }
 
 }

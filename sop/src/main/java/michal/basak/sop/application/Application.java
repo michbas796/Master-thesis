@@ -40,8 +40,8 @@ public class Application {
     }
 
     private static void print(GeneticAlgorithm.Results results) {
-        System.out.println(results.getBestIndividual().getCost());
-        System.out.println(results.getBestIndividual().getChromosome());
+        System.out.println(results.getBestIndividual().cost());
+        System.out.println(results.getBestIndividual().getChromosomeCopy());
         System.out.println(results.getMeanPopulationCost());
         System.out.println("Czas wykonania: " + results.getExecutionTimeInMilliseconds() + "ms");
     }

@@ -12,7 +12,7 @@ public class MaxPartialOrderCrossover extends TwoPointCrossover {
     private final Map<Integer, Integer> nodesAndNumberOfItsPredecessors = new HashMap<>();
     private final List<Integer> maxPartialOrder = new ArrayList<>();
     private final List<Integer> currentPartialOrder = new ArrayList<>();
-    private final List<Set<Integer>> obligatoryPredecessors;
+    private final Map<Integer, Set<Integer>> obligatoryPredecessors;
     private final List<Integer> offspringChromosome = new LinkedList<>();
     private final List<Integer> firstParentCopy = new LinkedList<>();
     private final List<Integer> secondParentCopy = new LinkedList<>();
