@@ -30,40 +30,49 @@ public class GeneticAlgorithmParams {
         stopCondition = StopCondition.GENERATIONS_NUMBER;
     }
 
-    public void setMaxNumberOfGenerations(int maxGenerationsNumber) {
+    public GeneticAlgorithmParams setMaxNumberOfGenerations(int maxGenerationsNumber) {
         this.maxGenerationsNumber = maxGenerationsNumber;
+        return this;
     }
 
-    public void setPopulationSize(int populationSize) {
+    public GeneticAlgorithmParams setPopulationSize(int populationSize) {
         this.populationSize = populationSize;
+        return this;
     }
 
-    public void setPathGenerator(AbstractPathGenerator pathGenerator) {
+    public GeneticAlgorithmParams setPathGenerator(AbstractPathGenerator pathGenerator) {
         this.pathGenerator = pathGenerator;
+        return this;
     }
 
-    public void setSelector(IndividualSelector selector) {
+    public GeneticAlgorithmParams setSelector(IndividualSelector selector) {
         this.selector = selector;
+        return this;
     }
 
-    public void setCrossover(Crossover crossover) {
+    public GeneticAlgorithmParams setCrossover(Crossover crossover) {
         this.crossover = crossover;
+        return this;
     }
 
-    public void setReplacer(PopulationReplacer replacer) {
+    public GeneticAlgorithmParams setReplacer(PopulationReplacer replacer) {
         this.replacer = replacer;
+        return this;
     }
 
-    public void setStopCondition(StopCondition stopCondition) {
+    public GeneticAlgorithmParams setStopCondition(StopCondition stopCondition) {
         this.stopCondition = stopCondition;
+        return this;
     }
 
-    public void setMutationProbability(double mutationProbability) {
+    public GeneticAlgorithmParams setMutationProbability(double mutationProbability) {
         this.mutationProbability = mutationProbability;
+        return this;
     }
 
-    public void setMaxExecutionTimeInMilliseconds(long maxExecutionTimeInMilliseconds) {
+    public GeneticAlgorithmParams setMaxExecutionTimeInMilliseconds(long maxExecutionTimeInMilliseconds) {
         this.maxExecutionTimeInMilliseconds = maxExecutionTimeInMilliseconds;
+        return this;
     }
 
     public enum StopCondition {

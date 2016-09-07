@@ -6,12 +6,12 @@ import michal.basak.sop.helpers.*;
 
 public class TournamentSelector implements IndividualSelector {
 
-    private int tournamentSize;
-    private Individual[] individualsInTournament;
-    private Population selectedIndividuals = new Population();
+    private final int TOURNAMENT_SIZE;
+    private final Individual[] individualsInTournament;
+    private final Population selectedIndividuals = new Population();
 
     public TournamentSelector(int tournamentSize) {
-        this.tournamentSize = tournamentSize;
+        TOURNAMENT_SIZE = tournamentSize;
         individualsInTournament = new Individual[tournamentSize];
     }
 
@@ -26,11 +26,11 @@ public class TournamentSelector implements IndividualSelector {
 
     private Individual bestIndividualFromTournament(Population population) {
         RandomInteger random = RandomInteger.getInstance();
-        for (int i = 0; i < tournamentSize; i++) {
+        for (int i = 0; i < TOURNAMENT_SIZE; i++) {
             individualsInTournament[i] = population.getIndividual(random.getFromRange(0, population.size()));
         }
         int bestIndividualIndex = 0;
-        for (int i = 1; i < tournamentSize; i++) {
+        for (int i = 1; i < TOURNAMENT_SIZE; i++) {
             if (individualsInTournament[i].cost() < individualsInTournament[bestIndividualIndex].cost()) {
                 bestIndividualIndex = i;
             }

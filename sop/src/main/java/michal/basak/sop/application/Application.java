@@ -52,17 +52,17 @@ public class Application {
             try {
                 switch (inputParams[i]) {
                     case "-g":
-                        algParams.setMaxNumberOfGenerations(Integer.parseInt(inputParams[i + 1]));
-                        algParams.setStopCondition(GeneticAlgorithmParams.StopCondition.GENERATIONS_NUMBER);
+                        algParams.setMaxNumberOfGenerations(Integer.parseInt(inputParams[i + 1]))
+                                .setStopCondition(GeneticAlgorithmParams.StopCondition.GENERATIONS_NUMBER);
                         i++;
                         break;
                     case "-t":
-                        algParams.setStopCondition(GeneticAlgorithmParams.StopCondition.TIME);
-                        algParams.setMaxExecutionTimeInMilliseconds(Long.parseLong(inputParams[i + 1]));
+                        algParams.setStopCondition(GeneticAlgorithmParams.StopCondition.TIME)
+                                .setMaxExecutionTimeInMilliseconds(Long.parseLong(inputParams[i + 1]));
                         break;
                     case "-mf":
-                        algParams.setStopCondition(GeneticAlgorithmParams.StopCondition.MEAN_FITNESS);
-                        algParams.setMaxNumberOfGenerations(Integer.parseInt(inputParams[i + 1]));
+                        algParams.setStopCondition(GeneticAlgorithmParams.StopCondition.MEAN_FITNESS)
+                                .setMaxNumberOfGenerations(Integer.parseInt(inputParams[i + 1]));
                         i++;
                         break;
                     case "-p":

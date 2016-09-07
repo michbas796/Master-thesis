@@ -14,12 +14,12 @@ public class IndividualFactory {
         this.pathGenerator = pathGenerator;
     }
 
-    public Individual createIndividual() {
+    public Individual createRandomIndividual() {
         List<Integer> chromosome = pathGenerator.generate();
         return new Individual(chromosome, costOf(chromosome));
     }
 
-    public Individual createIndividual(List<Integer> chromosome) {
+    public Individual createIndividualWith(List<Integer> chromosome) {
         return new Individual(chromosome, costOf(chromosome));
     }
 

@@ -69,7 +69,7 @@ public class GeneticAlgorithm implements Callable<GeneticAlgorithm.Results> {
         currentGenerationNumber = 0;
         generationsWithNoFitnessProgress = 0;
         for (int i = 0; i < params.populationSize; i++) {
-            population.add(individualFactory.createIndividual());
+            population.add(individualFactory.createRandomIndividual());
         }
         evaluateMeanCost();
         results.bestIndividual = population.getBestIndividual();
@@ -101,8 +101,8 @@ public class GeneticAlgorithm implements Callable<GeneticAlgorithm.Results> {
             if (Math.random() < params.mutationProbability) {
                 mutation.changeChromosome(secondOffspringChromosome);
             }
-            offspringsPopulation.add(individualFactory.createIndividual(firstOffspringChromosome));
-            offspringsPopulation.add(individualFactory.createIndividual(secondOffspringChromosome));
+            offspringsPopulation.add(individualFactory.createIndividualWith(firstOffspringChromosome));
+            offspringsPopulation.add(individualFactory.createIndividualWith(secondOffspringChromosome));
         }
     }
 
