@@ -77,4 +77,8 @@ public class Population extends AbstractCollection<Individual> {
         return Collections.max(individuals, (Individual i1, Individual i2) -> i1.cost() - i2.cost());
     }
 
+    public int totalCost() {
+        return individuals.stream().mapToInt((i) -> i.cost()).sum();
+    }
+
 }

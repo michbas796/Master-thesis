@@ -69,17 +69,11 @@ public class Application {
                         algParams.setPopulationSize(Integer.parseInt(inputParams[i + 1]));
                         i++;
                         break;
-                    case "-rw":
-                        algParams.setSelector(new RouletteWheelSelector());
-                        break;
                     case "-ts":
                         algParams.setSelector(new TournamentSelector(Integer.parseInt(inputParams[i + 1])));
                         break;
                     case "-rs":
                         algParams.setSelector(new RankSelector());
-                        break;
-                    case "-s":
-                        algParams.setSelector(new StochasticUniversalSamplingSelector());
                         break;
                     case "-fr":
                         algParams.setReplacer(new FullReplacer());
@@ -119,10 +113,8 @@ public class Application {
         System.out.println("-rpg generuje losowe trasy");
         System.out.println("-gpg tworzy trasy z użyciem fragmetów częściowo wygenerowanych przez algorytm zachłanny");
         System.out.println("Metoda selekcji:");
-        System.out.println("-rw | -ts <rozmiar turnieju> | -rs | -s ");
-        System.out.println("-rw selekcja proporcjonalna (koło ruletki)");
+        System.out.println("-ts <rozmiar turnieju> | -rs ");
         System.out.println("-ts selekcja turniejowa");
-        System.out.println("-s selekcja stochastyczna");
         System.out.println("Prawdopodobieństwo mutacji:");
         System.out.println("-mp <liczba z przedziału (0,1)>");
         System.out.println("Zastępowanie populacji:");
@@ -147,11 +139,11 @@ public class Application {
                 }
                 i++;
             } else if (inputParams[i].matches("-mp")) {
-                if (i + 1 >= inputParams.length || !inputParams[i + 1].matches("0.\\d+")) {
+                if (i + 1 >= inputParams.length || !inputParams[i + 1].matches("0.\\d+|1")) {
                     printUsageNotesAndExit();
                 }
                 i++;
-            } else if (!inputParams[i].matches("-rw|-rs|-s|-fr|-rpg|-gpg")) {
+            } else if (!inputParams[i].matches("-rs|-fr|-rpg|-gpg")) {
                 printUsageNotesAndExit();
             }
         }
@@ -163,7 +155,7 @@ public class Application {
     private static void assignParamsToGroups(String param) {
         if (param.matches("-g|-t|-mf")) {
             STOP_CONDITION_PARAMS.add(param);
-        } else if (param.matches("-rw|-rs|-ts|-s")) {
+        } else if (param.matches("-rs|-ts")) {
             SELECTION_METHOD_PARAMS.add(param);
         } else if (param.matches("-fr|er")) {
             POPULATION_REPLACE_PARAMS.add(param);

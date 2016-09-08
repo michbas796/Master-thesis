@@ -24,8 +24,8 @@ public class GeneticAlgorithmParams {
         populationSize = 10;
         mutationProbability = 0.001;
         pathGenerator = new RandomPathGenerator(citiesGraph);
-        selector = new RouletteWheelSelector();
-        crossover = new MaxPartialOrderCrossover(citiesGraph);
+        selector = new TournamentSelector(2);
+        crossover = new TwoPointCrossover();
         replacer = new FullReplacer();
         stopCondition = StopCondition.GENERATIONS_NUMBER;
     }
