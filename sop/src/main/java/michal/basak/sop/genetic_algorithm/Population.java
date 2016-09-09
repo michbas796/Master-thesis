@@ -5,10 +5,6 @@ import michal.basak.sop.genetic_algorithm.individuals.*;
 
 public class Population extends AbstractCollection<Individual> {
 
-    public static int totalCostOf(Population population) {
-        return population.stream().map((i) -> i.cost()).reduce(0, Integer::sum);
-    }
-
     private final ArrayList<Individual> individuals;
 
     public Population() {
