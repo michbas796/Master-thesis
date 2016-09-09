@@ -4,7 +4,7 @@ import java.util.*;
 import michal.basak.sop.genetic_algorithm.*;
 import michal.basak.sop.helpers.*;
 
-public class MaxPartialOrderCrossover extends TwoPointCrossover {
+public class MaxPartialOrderCrossover implements Crossover {
 
     private final int[][] firstParentMatrix;
     private final int[][] secondParentMatrix;
@@ -20,6 +20,7 @@ public class MaxPartialOrderCrossover extends TwoPointCrossover {
     private final int START_NODE;
     private final int END_NODE;
     private final int MATRIX_SIZE;
+    private final TwoPointCrossover twoPointCrossover = new TwoPointCrossover();
 
     public MaxPartialOrderCrossover(CitiesGraph citiesGraph) {
         START_NODE = citiesGraph.getStartNode();
@@ -38,7 +39,7 @@ public class MaxPartialOrderCrossover extends TwoPointCrossover {
         findMaxPartialOrder();
         firstParentCopy.removeAll(maxPartialOrder);
         secondParentCopy.removeAll(maxPartialOrder);
-        offspringChromosome.addAll(super.makeOffspringChromosome(firstParentCopy, secondParentCopy));
+        offspringChromosome.addAll(twoPointCrossover.makeOffspringChromosome(firstParentCopy, secondParentCopy));
         insertMaxPartialOrderElements();
         return offspringChromosome;
     }
@@ -52,9 +53,9 @@ public class MaxPartialOrderCrossover extends TwoPointCrossover {
         Set<Integer> obligatoryPredecessorsOfCurrentGene;
         while (maxPartialOrder.size() > 0) {
             obligatoryPredecessorsOfPartialOrderNode.clear();
-            for (Integer node : maxPartialOrder) {
+            maxPartialOrder.stream().forEach((node) -> {
                 obligatoryPredecessorsOfPartialOrderNode.addAll(obligatoryPredecessors.get(node));
-            }
+            });
             minIndex = 1;
             maxIndex = insertionIndex;
             lastNodeFromMaxPartialOrder = maxPartialOrder.remove(maxPartialOrder.size() - 1);
