@@ -18,21 +18,26 @@ public class TournamentSelector implements IndividualSelector {
     @Override
     public Population selectIndividualsFrom(Population population) {
         selectedIndividuals.clear();
-        for (int i = 0; i < population.size(); i++) {
+        for (int i = 0; i <= population.size() / 2; i++) {
             selectedIndividuals.add(bestIndividualFromTournament(population));
         }
         return selectedIndividuals;
     }
 
     private Individual bestIndividualFromTournament(Population population) {
-        RandomInteger random = RandomInteger.getInstance();
         for (int i = 0; i < TOURNAMENT_SIZE; i++) {
-            individualsInTournament[i] = population.getIndividual(random.getFromRange(0, population.size()));
+            individualsInTournament[i] = population.getIndividual(RandomInteger.getFromRange(0, population.size()));
         }
         int bestIndividualIndex = 0;
         for (int i = 1; i < TOURNAMENT_SIZE; i++) {
-            if (individualsInTournament[i].cost() < individualsInTournament[bestIndividualIndex].cost()) {
+            int currentIndividualCost = individualsInTournament[i].cost();
+            int bestIndividualCost = individualsInTournament[bestIndividualIndex].cost();
+            if (currentIndividualCost < bestIndividualCost) {
                 bestIndividualIndex = i;
+            } else if (currentIndividualCost == bestIndividualCost) {
+                if (Math.random() < 0.5) {
+                    bestIndividualIndex = i;
+                }
             }
         }
         return individualsInTournament[bestIndividualIndex];

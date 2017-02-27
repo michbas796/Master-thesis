@@ -11,22 +11,21 @@ public class RandomPathGenerator extends AbstractPathGenerator {
     }
 
     @Override
-    public List<Integer> generate() {
-        path.clear();
-        path.add(startNode);
-        while (path.size() < pathLength - 1) {
-            path.add(randomAcceptableNode());
+    public int[] generate() {
+        Arrays.fill(path, 0, path.length, -1);
+        path[0] = startNode;
+        for (int i = 1; i < path.length - 1; i++) {
+            path[i] = randomAcceptableNode();
         }
-        path.add(endNode);
+        path[path.length - 1] = endNode;
         return path;
     }
 
     protected int randomAcceptableNode() {
         findAcceptableNodes();
         Collections.shuffle(acceptableNodes);
-        RandomInteger random = RandomInteger.getInstance();
         if (acceptableNodes.size() > 1) {
-            return acceptableNodes.get(random.getFromRange(0, acceptableNodes.size()));
+            return acceptableNodes.get(RandomInteger.getFromRange(0, acceptableNodes.size()));
         }
         return acceptableNodes.get(0);
     }

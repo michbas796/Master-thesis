@@ -1,6 +1,8 @@
 package michal.basak.sop.genetic_algorithm;
 
 import michal.basak.sop.genetic_algorithm.crossover.*;
+import michal.basak.sop.genetic_algorithm.individuals.*;
+import michal.basak.sop.genetic_algorithm.mutation.*;
 import michal.basak.sop.genetic_algorithm.path_generation.*;
 import michal.basak.sop.genetic_algorithm.population_replacing.*;
 import michal.basak.sop.genetic_algorithm.selection.*;
@@ -9,25 +11,30 @@ public class GeneticAlgorithmParams {
 
     int maxGenerationsNumber;
     int populationSize;
+    double crossoverProbability;
     double mutationProbability;
     long maxExecutionTimeInMilliseconds;
+    int numberOfSubpopulations;
     CitiesGraph citiesGraph;
     PathGenerator pathGenerator;
+    IndividualFactory individualFactory;
     IndividualSelector selector;
-    Crossover crossover;
+    CrossoverOperator crossover;
+    MutationOperator mutation;
     PopulationReplacer replacer;
-    StopCondition stopCondition;
 
     public GeneticAlgorithmParams(CitiesGraph citiesGraph) {
         this.citiesGraph = citiesGraph;
         maxGenerationsNumber = 10000;
-        populationSize = 10;
-        mutationProbability = 0.001;
+        populationSize = 1000;
+        crossoverProbability = 1.0;
+        mutationProbability = 0.999;
         pathGenerator = new RandomPathGenerator(citiesGraph);
+        individualFactory = new IndividualFactory(citiesGraph, pathGenerator);
         selector = new TournamentSelector(2);
         crossover = new TwoPointCrossover();
+        mutation = new NeighborExchangeMutation(citiesGraph, mutationProbability);
         replacer = new FullReplacer();
-        stopCondition = StopCondition.GENERATIONS_NUMBER;
     }
 
     public GeneticAlgorithmParams setMaxNumberOfGenerations(int maxGenerationsNumber) {
@@ -50,7 +57,7 @@ public class GeneticAlgorithmParams {
         return this;
     }
 
-    public GeneticAlgorithmParams setCrossover(Crossover crossover) {
+    public GeneticAlgorithmParams setCrossover(CrossoverOperator crossover) {
         this.crossover = crossover;
         return this;
     }
@@ -60,22 +67,15 @@ public class GeneticAlgorithmParams {
         return this;
     }
 
-    public GeneticAlgorithmParams setStopCondition(StopCondition stopCondition) {
-        this.stopCondition = stopCondition;
+    public GeneticAlgorithmParams setCrossoverProbability(double crossoverProbability) {
+        this.crossoverProbability = crossoverProbability;
         return this;
     }
 
     public GeneticAlgorithmParams setMutationProbability(double mutationProbability) {
         this.mutationProbability = mutationProbability;
+        mutation.setMutationProbability(mutationProbability);
         return this;
     }
 
-    public GeneticAlgorithmParams setMaxExecutionTimeInMilliseconds(long maxExecutionTimeInMilliseconds) {
-        this.maxExecutionTimeInMilliseconds = maxExecutionTimeInMilliseconds;
-        return this;
-    }
-
-    public enum StopCondition {
-        GENERATIONS_NUMBER, MEAN_FITNESS, TIME
-    }
 }

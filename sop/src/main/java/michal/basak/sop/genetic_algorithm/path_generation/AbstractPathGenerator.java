@@ -5,7 +5,7 @@ import michal.basak.sop.genetic_algorithm.*;
 
 public abstract class AbstractPathGenerator implements PathGenerator {
 
-    protected final List<Integer> path;
+    protected final int[] path;
     protected final CitiesGraph citiesGraph;
     protected final Map<Integer, Set<Integer>> obligatoryPredecessors;
     protected final int startNode;
@@ -18,12 +18,13 @@ public abstract class AbstractPathGenerator implements PathGenerator {
         this.obligatoryPredecessors = citiesGraph.getObligatoryPredecessors();
         this.startNode = citiesGraph.getStartNode();
         this.endNode = citiesGraph.getEndNode();
-        path = new LinkedList<>();
+        path = new int[citiesGraph.numberOfCities()];
+        pathLength = path.length;
         acceptableNodes = new LinkedList<>();
-        pathLength = obligatoryPredecessors.get(endNode).size() + 1;
     }
 
-    public abstract List<Integer> generate();
+    @Override
+    public abstract int[] generate();
 
     protected void findAcceptableNodes() {
         Set<Integer> currentNodeObligatoryPredecessors;
@@ -31,10 +32,10 @@ public abstract class AbstractPathGenerator implements PathGenerator {
         acceptableNodes.clear();
         for (int i = 1; i < pathLength - 1; i++) {
             pathContainsAllObligatoryPredecessorsOfCurrentNode = true;
-            if (!path.contains(i)) {
+            if (pathNotContains(i)) {
                 currentNodeObligatoryPredecessors = obligatoryPredecessors.get(i);
                 for (Integer predecessor : currentNodeObligatoryPredecessors) {
-                    if (!path.contains(predecessor)) {
+                    if (pathNotContains(predecessor)) {
                         pathContainsAllObligatoryPredecessorsOfCurrentNode = false;
                         break;
                     }
@@ -46,4 +47,12 @@ public abstract class AbstractPathGenerator implements PathGenerator {
         }
     }
 
+    private boolean pathNotContains(int element) {
+        for (int i = 0; i < pathLength; i++) {
+            if (path[i] == element) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

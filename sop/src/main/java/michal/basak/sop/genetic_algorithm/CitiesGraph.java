@@ -13,7 +13,7 @@ public class CitiesGraph {
     private int endNode;
     private final int NODE_NOT_FOUND = -1;
 
-    public CitiesGraph(File inputFile) {
+    public CitiesGraph(File inputFile) throws IOException {
         loadAdjacencyMatrixFromFile(inputFile);
         assignObligatoryPredecessors();
         findFirstAndLastNode();
@@ -31,7 +31,7 @@ public class CitiesGraph {
         return obligatoryPredecessors.get(nodeNumber);
     }
 
-    private void loadAdjacencyMatrixFromFile(File inputFile) {
+    private void loadAdjacencyMatrixFromFile(File inputFile) throws IOException {
         try (BufferedReader fileReader = new BufferedReader(new FileReader(inputFile))) {
             String currentLine;
             adjacencyMatrix = new ArrayList<>();
@@ -39,7 +39,7 @@ public class CitiesGraph {
                 parseFileLine(currentLine);
             }
         } catch (IOException e) {
-            //TODO prawdopodobnie powinno wyrzucić nowy wyjątek.
+            throw new IOException(e.getMessage());
         }
     }
 

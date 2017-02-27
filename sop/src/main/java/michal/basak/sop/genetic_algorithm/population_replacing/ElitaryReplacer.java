@@ -20,7 +20,7 @@ public class ElitaryReplacer implements PopulationReplacer {
         }
         offspringsPopulation.sortFromBestToWorst();
         for (int i = 0; i < offspringsPopulation.size() - ELITE_SIZE; i++) {
-            nextPopulation.add(offspringsPopulation.removeIndividual(i));
+            nextPopulation.add(offspringsPopulation.getIndividual(i));
         }
         return nextPopulation;
     }

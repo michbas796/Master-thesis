@@ -5,11 +5,10 @@ import java.util.*;
 public class Individual {
 
     private final int COST;
-    private final List<Integer> chromosome;
+    private final int[] chromosome;
 
-    Individual(List<Integer> existingChromosome, int cost) {
-        chromosome = new LinkedList<>();
-        chromosome.addAll(existingChromosome);
+    Individual(int[] existingChromosome, int cost) {
+        chromosome = Arrays.copyOf(existingChromosome, existingChromosome.length);
         this.COST = cost;
     }
 
@@ -17,7 +16,7 @@ public class Individual {
         return COST;
     }
 
-    public List<Integer> getChromosomeCopy() {
-        return new ArrayList<>(chromosome);
+    public int[] getChromosomeCopy() {
+        return Arrays.copyOf(chromosome, chromosome.length);
     }
 }
